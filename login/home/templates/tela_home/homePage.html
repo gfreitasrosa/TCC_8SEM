@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xlms="http://www.w3.org/1999/xhtml">
+
+<head>
+    {% load static %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TCC - Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles_home.css' %}" />
+    <script src="https://cdn.tiny.cloud/1/gxc492csw9zj5gvc3a3iiq0div9b04p8dbxw1tkztgkfkml1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+<div id="page-container">
+    <!-- Popup form for creating a new trail -->
+    <div id="trail-popup" class="popup">
+        <div id="popup" class="popup-content">
+            {% csrf_token %}
+            <h2>Criar uma trilha</h2>
+            <label for="trail-name">Nome da trilha:</label>
+            <input type="text" id="trail-name" maxlength="25" /><br />
+
+            <label for="trail-date">Data final:</label>
+            <input type="date" id="trail-date" /><br />
+
+            <label>
+                <input type="checkbox" id="trail-reminder" />
+                Ativar lembrete
+            </label><br />
+
+            <button id="save-trail" onclick="saveTrail()">Salvar trilha</button>
+            <button id="cancel-trail">Cancelar</button>
+        </div>
+    </div>
+    
+    <div id="horizontal">
+        <div id="profilepic">
+            <img src="{% static 'images\306232.png' %}" alt="Imagem do Usuário" class="profile-image" onclick="toggleDropdown()">
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#profile" id="profile-link"><i class="fas fa-user"></i> Ver Perfil</a>
+
+                <!-- Popup do Perfil -->
+                <div id="profile-popup" class="popup">
+                    <div class="popup-content">
+                        <span class="close-btn" id="close-popup">&times;</span>
+                        
+                        <h2>Editar Perfil</h2>
+                        
+                        <form id="profile-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Campo para mudar a foto -->
+                            <label for="profile-pic">Foto de Perfil</label>
+                            <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
+                            
+                            <!-- Campo para mudar o e-mail -->
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" placeholder="Digite seu novo e-mail">
+                            
+                            <!-- Campo para mudar a senha -->
+                            <label for="password">Senha</label>
+                            <input type="password" id="password" name="password" placeholder="Digite sua nova senha">
+                            
+                            <button type="submit">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </div>
+
+                <a href="{% url 'logout' %}" ><i class="fas fa-sign-out-alt"></i> Sair</a>
+                <a href="#help" id="infoLink"><i class="fas fa-question-circle"></i> Ajuda</a>
+
+                <!-- Popup de Ajuda -->
+                <div id="infoPopup" class="popup" style="display:none;">
+                    <div class="popup-content">
+                        <span class="close-btn" id="closeInfoPopup">&times;</span>
+                        <h2>Informações Importantes</h2>
+                        <p id="textoAjuda">Aqui você pode adicionar um texto explicativo para ajudar os usuários a entenderem como usar sua aplicação, resolver problemas comuns ou fornecer dicas sobre funcionalidades.</p>
+                        <p id="textoAjuda">Exemplo: Para fazer login, insira seu nome de usuário e senha e clique em "Entrar". Se você esquecer sua senha, clique em "Esqueci minha senha" para recuperá-la.</p>
+                    </div>
+                </div>
+
+                <a href="#feedback" id="feedbackLink"><i class="fas fa-comment-dots"></i> Feedback</a>
+
+                   <!-- O Popup de Feedback -->
+                    <div id="helpPopup" class="popup" style="display:none;">
+                        <div class="popup-content">
+                            <span class="close-btn" id="closePopup">&times;</span>
+                            <h2>Envie-nos uma mensagem</h2>
+                            <form id="helpForm" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="subject">Assunto</label>
+                                    <input type="text" id="subject" name="subject" required class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Mensagem</label>
+                                    <textarea id="message" name="message" class="message-area" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div id="horizontal-navbar">
+            <ul id="nav_hor">
+                <li>Pontuação</li> 
+                <li>N° de atividades</li> 
+                <li>Streak</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="center">
+        <div id="vertical">
+            <div id="create-trail">
+                <button class="open-trail-popup">Criar trilha</button>
+            </div>
+            <div id="vertical-navbar">
+                <!-- trilhas criadas vão aqui -->
+            </div>
+        </div>
+        <div id="main">
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/script_home.js' %}"></script>
+</body>
+</html>

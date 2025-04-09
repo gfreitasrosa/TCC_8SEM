@@ -1,0 +1,729 @@
+html{
+background-color: #1393EF45;
+font-family: 'Roboto', sans-serif;
+color: #333;
+}
+h1, h2{
+color: #333;
+font-weight: bold;
+}
+h1{
+font-size: 24px;
+margin-bottom: 20px;
+}
+h2{
+font-size: 20px;
+margin-bottom: 15px;
+}
+label{
+font-size: 14px;
+color: #555;
+margin-bottom: 5px;
+display: block;
+}
+
+#login-container{
+display:flex;
+flex-direction: column;
+justify-content:center;
+align-items:center;
+position:relative;
+width:500px;
+height:auto;
+background-color:#516ED045;
+border-radius:25px;
+margin-top:250px;
+margin-left:auto;
+margin-right:auto;
+padding:20px;
+}
+
+.form-label{
+	margin-bottom:5px;
+}
+
+#uname, #umail,#pword{
+width:100%;
+margin-bottom:15px;
+border:1px solid #ccc;
+padding:10px;
+box-sizing:border-box;
+border-radius:25px;
+}
+
+button{
+width: auto;
+height: auto;
+padding: 10px 20px;
+margin-top: 10px;
+background-color: #007BFF;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+transition: background-color 0,3s ease, transform 0.2s ease;
+}
+
+button:hover{
+background-color: #0056b3;
+transform: translateY(-2px);
+}
+
+#criar-conta-link{
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+#page-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 90%;
+    max-width: 1850px;
+    height: auto;
+    min-height: 600px;
+    background-color: #516ED045;
+    border-radius: 25px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2%;
+}
+
+#main {
+display: flex;
+flex-direction: column;
+justify-content: center; /* Adjust alignment */
+align-items: center; /* Align content to the start */
+position: relative;
+width: 80%;
+min-height: 600px;
+max-width: 1200px;
+background-color: #516ED045;
+border-radius: 1rem;
+margin: 25px auto; /* Centered horizontally */
+padding: 5%;
+overflow: hidden; /* Prevent content overflow */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#create-trail{
+display:flex;
+justify-content:flex-start;
+align-items:flex-start;
+margin-top:0;
+}
+
+#horizontal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 1800px;
+    height: auto;
+    background-color: #007BFF;
+    border-radius: 10px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
+}
+
+#horizontal-navbar{
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 1500px;
+    height: auto;;
+    border-radius: 25px;
+    margin-top: 25px;
+    margin-right: auto;
+    padding: 20px;
+    }
+    #horizontal-navbar ul{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+    }
+    #horizontal-navbar il{
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#profilepic{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#vertical{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    width: 280px;
+    height: auto;
+    min-height: 600px;
+    max-height: 100%;
+    background-color: #516ED045;
+    border-radius: 15px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    gap:10px;
+}
+
+#center{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#nav_hor{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #007BFF;
+    border-radius: 10px;
+}
+
+#nav_hor li{
+    text-decoration:none;
+    color:black;
+    font-weight: bold;
+    display:inline-block;
+    margin-right:10px;
+    padding:10px 20px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    background-color:#f0f0f0;
+    transition: background-color 0,3s ease;
+    }
+    #trail-popup button{
+    width: 100px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    #trail-popup button:hover{
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Popup styling */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    width: 300px;
+    text-align: center;
+    z-index: 1001;
+    }
+    #trail-name,
+    #trail-date{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#vertical-navbar .trail-card {
+    margin: 10px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #vertical-navbar .trail-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+#uppermain{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    width: 1800px;
+    height: auto;
+    background-color: #516ED045;
+    border-radius: 25px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: s20px;
+}
+
+#task-list {
+width: 100%;
+padding: 0 10px;
+margin-top: 20px;
+max-height: 100%;
+overflow-y: auto;
+overflow-x: hidden;
+display: flex;
+flex-direction: column; /* Ensure task items stack vertically */
+align-content: center; /* Center task items horizontally */
+align-items: center;
+box-sizing: border-box;
+gap: 10px; /* Space between tasks */
+box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.task-item {
+    width: calc(100% - 20px); /* Respect parent padding */
+    max-width: 100%; /* Ensure it doesn't overflow */
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .task-item:hover{
+    background-color: #f1f1f1;
+    transform: translateY(-2px);
+}
+
+.textoAjuda{
+    color: black;
+}
+
+#progress-display {
+font-size: 18px;
+color: green;
+font-weight: bold;
+margin-top: 5px;
+}
+
+.hamburger{
+    display: none;
+    }
+    @media (max-width: 1200px){
+    #page-container {
+    width: 100%; /* Full width on smaller screens */
+    padding: 10px; /* Reduce padding */
+    }
+    #horizontal {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align left */
+    padding: 10px;
+    }
+    #horizontal-navbar ul {
+    flex-wrap: wrap; /* Allow items to wrap */
+    gap: 10px; /* Add spacing between items */
+    }
+    #main {
+    width: 90%; /* Adjust to fit within smaller screens */
+    }
+    #vertical {
+    width: 100%; /* Full width on small screens */
+    margin: 10px 0; /* Adjust spacing */
+    }
+    #task-list {
+    max-height: 300px; /* Limit task list height */
+    overflow-y: auto; /* Enable scrolling */
+    }
+    }
+    /* Further adjustments for very small screens (mobile) */
+    @media (max-width: 768px) {
+    #horizontal{
+    max-width: 80%;
+    }
+    #horizontal-navbar{
+    max-width: 80%;
+    }
+    #horizontal-navbar ul{
+    max-width: 100%;
+    }
+    #horizontal-navbar li {
+    font-size: 12px; /* Reduce text size */
+    padding: 5px 10px; /* Compact spacing */
+    }
+    button {
+    width: auto;
+    padding: 8px 12px; /* Adjust button size */
+    font-size: 14px; /* Smaller font */
+    }
+    #traildisp{
+    flex-direction: row; /* Stack details vertically */
+    align-items: center; /* Center align for cleaner layout */
+    gap: 10px;
+    padding: 15px;
+    font-size: 14px;
+    max-width: 50%;
+    justify-content: flex-start;
+    flex: 1;
+    flex-wrap: wrap;
+    overflow: auto;
+    }
+    #main h1 {
+    font-size: 18px; /* Smaller headings */
+    }
+    #vertical-navbar .trail-card {
+    font-size: 14px;
+    padding: 10px; /* Compact the cards */
+    }
+    #vertical, #main{
+    max-width: 100%;
+    }
+    #profilepic{
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    }
+}
+    
+#main ul {
+display: flex;
+justify-content: space-between; /* Distribute items evenly */
+align-items: center; /* Vertically center items */
+list-style-type: none; /* Remove bullets */
+padding: 0; /* Remove default padding */
+margin: 0; /* Remove default margin */
+width: 100%; /* Ensure full width */
+box-sizing: border-box; /* Include padding in dimensions */
+gap: 200px; /* Space between items */
+}
+
+#main ul li {
+flex: 1; /* Equal space for all items */
+text-align: center; /* Center content */
+padding: 10px;
+border-radius: 5px;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* #profilepic{
+	position:relative;
+	width:150px;
+	height:150px;
+	background-color:black;
+	border-radius:100px;
+	margin-right:100px;
+}
+
+#profilepic {
+	position: relative;
+	cursor: pointer;
+} */
+
+#profilepic {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: black;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Ajusta o menu para descer abaixo do círculo */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 150x; /* Posiciona o menu logo abaixo do círculo */
+    left: 0;
+    background-color: #00000045;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    min-width: 150px;
+    border-radius: 4px;
+    padding: 8px 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+
+.show {
+    display: block;
+}
+
+ /* Estilo do Link "Ajuda" */
+ .feedbackLink-link {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.feedbackLink-link:hover {
+    text-decoration: underline;
+}
+
+.message-area {
+    width: 500px;          /* Ajuste a largura desejada */
+    height: 300px;         /* Ajuste a altura desejada */
+    resize: none;          /* Remove a opção de redimensionamento */
+    padding: 10px;         /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza */
+    border-radius: 5px;    /* Bordas arredondadas */
+    font-size: 14px;       /* Tamanho do texto */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total */
+    background-color: #f9f9f9; /* Cor de fundo clara */
+}
+
+/* Estilo do Popup */
+/*
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+}
+*/
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Estilo do Link de Ajuda */
+.info-link {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.info-link:hover {
+    text-decoration: underline;
+}
+
+.popup h2 {
+    margin-bottom: 15px;
+}
+
+.popup p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Estilos do popup */
+.popup {
+    display: none;  /* Inicialmente oculto */
+    position: fixed;
+    z-index: 1;  /* Fica sobre os outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  /* Fundo escuro */
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;  /* Tamanho do popup */
+    max-width: 500px;  /* Limita a largura do popup */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botão de fechar */
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo do formulário */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.alert {
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745; /* Verde */
+    border: 1px solid #28a745;
+}
+
+.alert-error {
+    background-color: #dc3545; /* Vermelho */
+    border: 1px solid #dc3545;
+}
+
+
+/* Modo Daltonismo */
+.daltonic-mode {
+    background-color: #f0f0f0 !important; /* Fundo mais neutro */
+}
+
+.daltonic-mode #login-container,
+.daltonic-mode #page-container,
+.daltonic-mode #main,
+.daltonic-mode #horizontal,
+.daltonic-mode #horizontal-navbar,
+.daltonic-mode #vertical {
+    background-color: #2e2e2e !important; /* Fundo escuro para melhor contraste */
+}
+
+.daltonic-mode button:hover {
+    background-color: #FFB400 !important; /* Cor de destaque visível */
+}
+
+.daltonic-mode #nav_hor li {
+    color: #000000 !important; /* Texto em preto */
+    background-color: #FFF !important; /* Fundo branco */
+}
+
+.daltonic-mode .popup-content {
+    background-color: #2e2e2e !important; /* Fundo mais escuro no popup */
+    color: #ffffff !important; /* Texto branco */
+}
+
+.daltonic-mode #profilepic {
+    background-color: #000 !important; /* Melhor contraste */
+}
+
+.daltonic-mode .feedbackLink-link {
+    color: #1a73e8 !important; /* Cor do link de ajuda mais contrastante */
+}
+
+.daltonic-mode #nav_hor li:hover {
+    background-color: #e0e0e0 !important; /* Cor de fundo mais visível quando passar o mouse */
+}
+
+.daltonic-mode button {
+    background-color: #4CAF50 !important; /* Cor de fundo do botão mais visível */
+    color: white !important; /* Texto branco no botão */
+}
+

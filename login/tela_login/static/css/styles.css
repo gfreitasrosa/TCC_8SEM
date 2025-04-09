@@ -1,0 +1,58 @@
+html{
+	background-color:#1393EF45;
+}
+
+#login-container{
+	display:flex;
+	flex-direction: column;
+	justify-content:center;
+	align-items:center;
+	position:relative;
+	width:500px;
+	height:auto;
+	background-color:#516ED045;
+	border-radius:25px;
+	margin-top:250px;
+	margin-left:auto;
+	margin-right:auto;
+	padding:20px;
+}
+
+.form-label{
+	margin-bottom:5px;
+}
+
+#uname,#umail,#pword{
+	width:100%;
+	margin-bottom:15px;
+	border:1px solid #ccc;
+	padding:10px;
+	box-sizing:border-box;
+	border-radius:25px;
+}
+
+#name,#umail,#pword{
+	width:100%;
+	margin-bottom:15px;
+	border:1px solid #ccc;
+	padding:10px;
+	box-sizing:border-box;
+	border-radius:25px;
+}
+
+button{
+	width:100px;
+	height:40px;
+	padding:0px;
+	margin-top:10px;
+}
+
+button:hover{
+	background-color:#4CAF50;
+}
+
+#criar-conta-link{
+	font-weight: bold;
+	text-decoration:none;
+	margin-top:10px;
+}

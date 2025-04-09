@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xlms="http://www.w3.org/1999/xhtml">
+
+<head>
+{% load static %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TCC - Login</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+</head>
+
+<body>
+
+    <form id="loginForm" action="{% url 'login' %}" method="post">
+        {% csrf_token %}  <!-- Token de segurança contra CSRF -->
+        <div id="login-container">
+            <label for="umail" class="form-label"><b>E-mail</b></label>
+            <input id="umail" type="email" placeholder="Insira seu e-mail cadastrado" name="umail" required>
+    
+            <label for="pword" class="form-label"><b>Senha</b></label>
+            <input id="pword" type="password" placeholder="Insira sua senha" name="pword" required>
+            
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <button type="submit">Login</button>
+
+            <a href="{% url 'cadastro' %}" id="criar-conta-link">Criar uma conta</a>
+        </div>
+    </form>
+
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

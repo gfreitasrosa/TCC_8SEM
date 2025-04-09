@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xlms="http://www.w3.org/1999/xhtml">
+
+<head>
+{% load static %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TCC - Register</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+</head>
+
+<body>
+
+    <form action="{% url 'cadastro' %}" method="post">
+        {% csrf_token %}
+        <div id="login-container">
+            <!-- Nome -->
+            <label for="name" class="form-label"><b>Nome</b></label>
+            <input id="uname" type="text" placeholder="Insira seu nome completo" name="name" required>
+            <!-- Exibe o erro do campo "nome" -->
+            {% if form.nome.errors %}
+                <div class="error-message">
+                    {{ form.nome.errors }}
+                </div>
+            {% endif %}
+    
+            <!-- E-mail -->
+            <label for="email" class="form-label"><b>E-mail</b></label>
+            <input id="umail" type="email" placeholder="Insira seu e-mail" name="email" required>
+            <!-- Exibe o erro do campo "email" -->
+            {% if form.email.errors %}
+                <div class="error-message">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+    
+            <!-- Senha -->
+            <label for="password" class="form-label"><b>Senha</b></label>
+            <input id="pword" type="password" placeholder="Insira sua senha" name="password" required>
+            <!-- Exibe o erro do campo "senha" -->
+            {% if form.senha.errors %}
+                <div class="error-message">
+                    {{ form.senha.errors }}
+                </div>
+            {% endif %}
+    
+            <button type="submit">Registrar</button>
+            <a href="{% url 'login' %}" id="criar-conta-link">Login</a>
+        </div>
+    </form>
+
+</body>
+
+</html>
