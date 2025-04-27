@@ -94,11 +94,11 @@ function displayTrailScreen(name, date, reminder) {
     <!-- Top section: Name, Date, Reminder, and Progress -->
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; background-color: #516ED045; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box;">
     <!-- <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; position: relative;"> -->
-    <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin-left: -50rem; justify-content: space-around; align-items: left; align-content: center; list-style-type: none; max-width: 2rem;">
+    <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin-left: -60rem; justify-content: space-around; align-items: left; align-content: center; list-style-type: none; max-width: 2rem;">
     <li style="text-decoration: none; display: inline-block;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete
     </label></li>
-    <li style="text-decoration: none; display: inline-block;"><h2 style="font-size: calc(1vw + 1vh)">${name}</h2></li>
+    <li style="text-decoration: none; display: inline-block;"><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white=space: nowrap; display: block;">${name}</h2></li>
     <li style="text-decoration: none; display: inline-block;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
     <li style="text-decoration: none; display: inline-block;"><h2>Data final: ${date}</h2></li>
     </ul>
@@ -131,6 +131,11 @@ function displayTrailScreen(name, date, reminder) {
                 taskItem.innerText = taskName;
                 taskItem.classList.add("task-item");
                 taskItem.dataset.id = taskId;
+				taskItem.title = taskName; // Tooltip ao passar o mouse
+				taskItem.style.maxWidth = "100%";
+				taskItem.style.overflow = "hidden";
+				taskItem.style.textOverflow = "ellipsis";
+				taskItem.style.whiteSpace = "nowrap";
 
                 taskItem.addEventListener("click", function () {
                     displayTaskDetails(taskName, taskId);
@@ -155,7 +160,9 @@ function displayTaskDetails(taskName, taskId) {
     const taskDetailsContainer = document.getElementById("task-details");
     taskDetailsContainer.innerHTML = `
     <h3>Detalhes da task</h3>
-    <p>Nome da task: ${taskName}</p>
+    <p style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${taskName}">
+    <strong>Nome da task:</strong> ${taskName}
+	</p>
     <p>Status:
     <select id="task-status">
     <option value="Ongoing">Em andamento</option>
@@ -237,3 +244,29 @@ function updateProgress() {
         progressDisplay.innerText = `Progress: ${progress.toFixed(0)}%`;
     }
 }
+
+
+function applyTheme(theme) {
+    // Remove todas as classes de tema do <html>
+    document.documentElement.classList.remove('light-theme', 'dark-theme', 'cherry-theme');
+
+    // Aplica a nova classe, se não for "default"
+    if (theme !== "default") {
+        document.documentElement.classList.add(`${theme}-theme`);
+    }
+
+    // Salva o tema no localStorage
+    localStorage.setItem('selected-theme', theme);
+}
+
+// Ao carregar a página
+window.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("selected-theme") || "default";
+    document.getElementById("theme-selector").value = savedTheme;
+    applyTheme(savedTheme);
+});
+
+// Ao trocar o tema manualmente
+document.getElementById("theme-selector").addEventListener("change", function () {
+    applyTheme(this.value);
+});

@@ -1,11 +1,43 @@
+:root {
+	--bg-color: #e6f0fa;/* #ffffff; */
+	--text-color: #0a0a0a; /* #000000; */
+	--accent-color: #4095e1; /* #516ED0; */
+	--container-bg: #c5e0f8; /* #516ED045; */
+	--card-bg: #f0f6fc; /* #f0f0f0; */
+	--button-hover-color: #3077c7;
+}
+
+html.dark-theme{
+	--bg-color: #121212;
+	--text-color: #e0e0e0;
+	--accent-color: #4a5a75;
+	--container-bg: #1e1e1e;
+	--card-bg: #2b2b2b;
+	--button-hover-color: #3c4b65;
+}
+
+html.cherry-theme{
+	--bg-color: #ffeef1;
+	--text-color: #5c1a1b;
+	--accent-color: #f48fb1;
+	--container-bg: #fbd6dd;
+	--card-bg: #fff0f5;
+	--button-hover-color: #dd7399;
+}
+
 html{
-background-color: #1393EF45;
+background-color: var(--bg-color);
 font-family: 'Roboto', sans-serif;
-color: #333;
+color: var(--text-color); /* #333 */
+}
+
+body{
+	background-color: var(--bg-color);
+	color: var(--text-color);
 }
 
 h1, h2{
-color: #333;
+color: var(--text-color);
 font-weight: bold;
 }
 
@@ -34,7 +66,7 @@ align-items: center;
 position: relative;
 width: 500px;
 height: auto;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 25px;
 margin-top: 250px;
 margin-left: auto;
@@ -60,7 +92,7 @@ width: auto;
 height: auto;
 padding: 10px 20px;
 margin-top: 10px;
-background-color: #007BFF;
+background-color: var(--accent-color);
 color: white;
 border: none;
 border-radius: 5px;
@@ -70,7 +102,7 @@ transition: background-color 0,3s ease, transform 0.2s ease;
 }
 
 button:hover{
-background-color: #0056b3;
+background-color: var(--button-hover-color);
 transform: translateY(-2px);
 }
 
@@ -89,7 +121,7 @@ position: relative;
 width: 1850px;
 max-width: 1850px;
 height: auto;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 25px;
 margin-top: 25px;
 margin-left: auto;
@@ -106,7 +138,7 @@ position: relative;
 width: 80%;
 max-width: 1200px;
 height: 1000px;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 1rem;
 margin: 25px auto; /* Centered horizontally */
 padding: 5%;
@@ -131,7 +163,7 @@ position: relative;
 width: 78rem; /* 100% before (delete this) */
 max-width: 1800px;
 height: auto;
-background-color: #007BFF;
+background-color: var(--accent-color); /* #007BFF */
 border-radius: 10px;
 margin-top: 25px;
 margin-left: auto;
@@ -192,7 +224,7 @@ position: relative;
 width: 280px;
 height: auto;
 max-height: 100%;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 15px;
 margin-top: 25px;
 margin-left: auto;
@@ -221,7 +253,7 @@ display: flex;
 flex-wrap: nowrap;
 justify-content: space-evenly;
 align-items: center;
-background-color: #007BFF;
+background-color: var(--accent-color);
 border-radius: 10px;
 max-width: 76rem;
 }
@@ -235,7 +267,7 @@ margin-right:10px;
 padding:10px 20px;
 border:1px solid #ccc;
 border-radius:5px;
-background-color:#f0f0f0;
+background-color: var(--card-bg); /* #f0f0f0 */ 	
 transition: background-color 0,3s ease;
 }
 
@@ -272,7 +304,7 @@ z-index: 1000;
 }
 
 .popup-content {
-background-color: #ffffff;
+background-color: var(--bg-color);
 padding: 20px;
 border-radius: 15px;
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -295,11 +327,11 @@ box-sizing: border-box;
 #vertical-navbar .trail-card {
 margin: 10px;
 padding: 15px;
-background-color: #ffffff;
+background-color: var(--bg-color);
 border: 1px solid #ddd;
 border-radius: 10px;
 cursor: pointer;
-color: #333;
+color: var(--text-color);
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -317,7 +349,7 @@ align-items: center;
 position: relative;
 width: 1800px;
 height: auto;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 25px;
 margin-top: 25px;
 margin-left: auto;
@@ -326,6 +358,7 @@ padding: s20px;
 }
 
 #task-list {
+background-color: var(--container-bg);
 width: 100%;
 padding: 0 10px;
 margin-top: 20px;
@@ -346,12 +379,12 @@ width: calc(100% - 20px); /* Respect parent padding */
 max-width: 100%; /* Ensure it doesn't overflow */
 box-sizing: border-box;
 padding: 10px;
-background-color: #f9f9f9;
+background-color: var(--card-bg);
 border: 1px solid #ddd;
 border-radius: 8px;
 margin-bottom: 10px;
 cursor: pointer;
-color: #333;
+color: var(--text-color);
 font-size: 14px;
 text-align: center;
 justify-content: center;
@@ -410,6 +443,8 @@ padding: 10px;
 }
 
 #horizontal-navbar ul {
+background-color: var(--accent-color);
+color: var(text-color);
 flex-wrap: wrap; /* Allow items to wrap */
 gap: 10px; /* Add spacing between items */
 }
@@ -450,6 +485,7 @@ padding: 5px 10px; /* Compact spacing */
 }
 
 button {
+background-color: var(--accent-color);
 width: auto;
 padding: 8px 12px; /* Adjust button size */
 font-size: 14px; /* Smaller font */
@@ -473,6 +509,7 @@ font-size: 18px; /* Smaller headings */
 }
 
 #vertical-navbar .trail-card {
+background-color: var(--card-bg);
 font-size: 14px;
 padding: 10px; /* Compact the cards */
 }
