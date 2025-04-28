@@ -95,16 +95,16 @@ function displayTrailScreen(name, date, reminder) {
     <div style="display: flex; flex-direction: column; width: 100%; gap: 20px; height: 100%;">
     <!-- Top section: Name, Date, Reminder, and Progress -->
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; background-color: #516ED045; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box;">
-    <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; position: relative;">
-    <ul id="traildisp" style="display: flex; flex-wrap: nowrap; justify-content: space-around; align-content: center; list-style-type: none">
+    <!-- <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; position: relative;"> -->
+    <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin: 0; padding: 0; justify-content: space-between; align-items: center; list-style-type: none; width: 100%; box-sizing: border-box; gap:100px;">
     <li style="text-decoration: none; display: inline-block;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete
     </label></li>
-    <li style="text-decoration: none; display: inline-block;"><h2 id="trilha_name">${name}</h2></li>
+    <li style="text-decoration: none; display: inline-block;"><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 10rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
     <li style="text-decoration: none; display: inline-block;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
     <li style="text-decoration: none; display: inline-block;"><h2>Data final: ${date}</h2></li>
     </ul>
-    </div>
+   <!-- </div> -->
     </div>
 
     <!-- Task management section -->
@@ -117,7 +117,7 @@ function displayTrailScreen(name, date, reminder) {
 
     <!-- Task details -->
     <div id="task-details" style="flex-grow: 1; width: calc(100% - 220px); max-height: 100%; background-color: #516ED045; padding: 20px; border-radius: 10px; box-sizing: border-box; overflow-y: auto;">
-    <h3>Selcione uma task para visualizar os detalhes</h3>
+    <h3>Selecione uma task para visualizar os detalhes</h3>
     </div>
     </div>
     </div>
@@ -149,6 +149,31 @@ function displayTrailScreen(name, date, reminder) {
 
     updateProgress();
 }
+
+function applyTheme(theme) {
+    // Remove todas as classes de tema do <html>
+    document.documentElement.classList.remove('light-theme', 'dark-theme', 'cherry-theme');
+
+    // Aplica a nova classe, se não for "default"
+    if (theme !== "default") {
+        document.documentElement.classList.add(`${theme}-theme`);
+    }
+
+    // Salva o tema no localStorage
+    localStorage.setItem('selected-theme', theme);
+}
+
+// Ao carregar a página
+window.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("selected-theme") || "default";
+    document.getElementById("theme-selector").value = savedTheme;
+    applyTheme(savedTheme);
+});
+
+// Ao trocar o tema manualmente
+document.getElementById("theme-selector").addEventListener("change", function () {
+    applyTheme(this.value);
+});
 
 // Function to display task details
 async function displayTaskDetails(taskName, taskId) {  // Tornar a função assíncrona
