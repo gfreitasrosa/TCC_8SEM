@@ -1,10 +1,43 @@
-html{
-background-color: #1393EF45;
-font-family: 'Roboto', sans-serif;
-color: #333;
+:root {
+	--bg-color: #e6f0fa;/* #ffffff; */
+	--text-color: #0a0a0a; /* #000000; */
+	--accent-color: #4095e1; /* #516ED0; */
+	--container-bg: #c5e0f8; /* #516ED045; */
+	--card-bg: #f0f6fc; /* #f0f0f0; */
+	--button-hover-color: #3077c7;
 }
+
+html.dark-theme{
+	--bg-color: #121212;
+	--text-color: #e0e0e0;
+	--accent-color: #4a5a75;
+	--container-bg: #1e1e1e;
+	--card-bg: #2b2b2b;
+	--button-hover-color: #3c4b65;
+}
+
+html.cherry-theme{
+	--bg-color: #ffeef1;
+	--text-color: #5c1a1b;
+	--accent-color: #f48fb1;
+	--container-bg: #fbd6dd;
+	--card-bg: #fff0f5;
+	--button-hover-color: #dd7399;
+}
+
+html{
+background-color: var(--bg-color);
+font-family: 'Roboto', sans-serif;
+color: var(--text-color);
+}
+
+body{
+background-color: var(--bg-color);
+color: var(--text-color);
+}
+
 h1, h2{
-color: #333;
+color: var(--text-color);
 font-weight: bold;
 }
 h1{
@@ -30,7 +63,7 @@ align-items:center;
 position:relative;
 width:500px;
 height:auto;
-background-color:#516ED045;
+background-color:var(--container-bg);
 border-radius:25px;
 margin-top:250px;
 margin-left:auto;
@@ -56,17 +89,17 @@ width: auto;
 height: auto;
 padding: 10px 20px;
 margin-top: 10px;
-background-color: #007BFF;
+background-color: var(--accent-color);
 color: white;
 border: none;
 border-radius: 5px;
 cursor: pointer;
 font-weight: bold;
-transition: background-color 0,3s ease, transform 0.2s ease;
+transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover{
-background-color: #0056b3;
+background-color: var(--button-hover-color);
 transform: translateY(-2px);
 }
 
@@ -85,8 +118,7 @@ transform: translateY(-2px);
     width: 90%;
     max-width: 1850px;
     height: auto;
-    min-height: 600px;
-    background-color: #516ED045;
+    background-color: var(--container-bg);
     border-radius: 25px;
     margin-top: 25px;
     margin-left: auto;
@@ -101,13 +133,14 @@ justify-content: center; /* Adjust alignment */
 align-items: center; /* Align content to the start */
 position: relative;
 width: 80%;
-min-height: 600px;
+height: 1000px;
 max-width: 1200px;
-background-color: #516ED045;
+background-color: var(--container-bg);
 border-radius: 1rem;
 margin: 25px auto; /* Centered horizontally */
 padding: 5%;
 overflow: hidden; /* Prevent content overflow */
+box-sizing: border-box;
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -124,16 +157,17 @@ margin-top:0;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    width: 100%;
+    width: 78rem; /* 100% before (delete this) */
     max-width: 1800px;
     height: auto;
-    background-color: #007BFF;
+    background-color: var(--accent-color);
     border-radius: 10px;
     margin-top: 25px;
     margin-left: auto;
     margin-right: auto;
     padding: 15px;
     box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
+    color: white
 }
 
 #horizontal-navbar{
@@ -141,8 +175,8 @@ margin-top:0;
     justify-content: center;
     align-items: center;
     position: relative;
-    width: 1500px;
-    height: auto;;
+    width: 75rem; /* once was 1500px; */
+    height: auto;
     border-radius: 25px;
     margin-top: 25px;
     margin-right: auto;
@@ -156,7 +190,7 @@ margin-top:0;
     margin: 0;
     gap: 20px;
     }
-    #horizontal-navbar il{
+    #horizontal-navbar li{
     padding: 8px 16px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
@@ -184,9 +218,8 @@ margin-top:0;
     position: relative;
     width: 280px;
     height: auto;
-    min-height: 600px;
     max-height: 100%;
-    background-color: #516ED045;
+    background-color: var(--container-bg);
     border-radius: 15px;
     margin-top: 25px;
     margin-left: auto;
@@ -215,8 +248,9 @@ margin-top:0;
     flex-wrap: nowrap;
     justify-content: space-evenly;
     align-items: center;
-    background-color: #007BFF;
+    background-color: var(--accent-color);
     border-radius: 10px;
+	max-width: 76rem;
 }
 
 #nav_hor li{
@@ -228,8 +262,8 @@ margin-top:0;
     padding:10px 20px;
     border:1px solid #ccc;
     border-radius:5px;
-    background-color:#f0f0f0;
-    transition: background-color 0,3s ease;
+    background-color:var(--card-bg);
+    transition: background-color 0.3s ease;
     }
     #trail-popup button{
     width: 100px;
@@ -263,7 +297,7 @@ margin-top:0;
 }
 
 .popup-content {
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -285,11 +319,11 @@ margin-top:0;
 #vertical-navbar .trail-card {
     margin: 10px;
     padding: 15px;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     border: 1px solid #ddd;
     border-radius: 10px;
     cursor: pointer;
-    color: #333;
+    color: var(--text-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -306,7 +340,7 @@ margin-top:0;
     position: relative;
     width: 1800px;
     height: auto;
-    background-color: #516ED045;
+    background-color: var(--container-bg);
     border-radius: 25px;
     margin-top: 25px;
     margin-left: auto;
@@ -315,6 +349,7 @@ margin-top:0;
 }
 
 #task-list {
+background-color: var(--container-bg);
 width: 100%;
 padding: 0 10px;
 margin-top: 20px;
@@ -335,12 +370,12 @@ box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     max-width: 100%; /* Ensure it doesn't overflow */
     box-sizing: border-box;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: var(--card-bg);
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 10px;
     cursor: pointer;
-    color: #333;
+    color: var(--text-color);
     font-size: 14px;
     text-align: center;
     justify-content: center;
@@ -366,10 +401,10 @@ margin-top: 5px;
 
 .hamburger{
     display: none;
-    }
+}
     @media (max-width: 1200px){
     #page-container {
-    width: 100%; /* Full width on smaller screens */
+    width: 80rem;  /* 100% before (delete this if it works) */ /* Full width on smaller screens */
     padding: 10px; /* Reduce padding */
     }
     #horizontal {
@@ -378,6 +413,8 @@ margin-top: 5px;
     padding: 10px;
     }
     #horizontal-navbar ul {
+    background-color: var(--accent-color);
+    color: var(text-color);
     flex-wrap: wrap; /* Allow items to wrap */
     gap: 10px; /* Add spacing between items */
     }
@@ -409,6 +446,7 @@ margin-top: 5px;
     padding: 5px 10px; /* Compact spacing */
     }
     button {
+    background-color: var(--accent-color);
     width: auto;
     padding: 8px 12px; /* Adjust button size */
     font-size: 14px; /* Smaller font */
@@ -429,6 +467,7 @@ margin-top: 5px;
     font-size: 18px; /* Smaller headings */
     }
     #vertical-navbar .trail-card {
+    background-color: var(--card-bg);
     font-size: 14px;
     padding: 10px; /* Compact the cards */
     }
