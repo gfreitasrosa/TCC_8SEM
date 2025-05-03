@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.conf import settings
-from django.contrib.auth.models import User
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, name, password=None):
@@ -24,8 +23,11 @@ class Usuario(AbstractBaseUser):
     name = models.CharField(max_length=150, default="Usuário Anônimo")
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128, default="defaultpassword")  # Armazenamento seguro da senha
+    points = models.IntegerField(default=0)
+    streak = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    last_task_completed = models.DateField(null=True, blank=True)  # Última data de conclusão de tarefa
 
     objects = UsuarioManager()
 
@@ -38,8 +40,3 @@ class Usuario(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
-"""
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(upload_to='profile_pics/', default='default_profile_pic.jpg')  # Caminho relativo onde a imagem será salva
-"""
