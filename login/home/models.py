@@ -14,12 +14,13 @@ class Trilha(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    status = models.CharField(max_length=50, choices=[('Em andamento', 'Em andamento'), ('Concluido', 'Concluido')], default='Ongoing')
+    status = models.CharField(max_length=50, choices=[('Em andamento', 'Em andamento'), ('Concluido', 'Concluido')], default='Em andamento')
     notes = models.TextField(blank=True, null=True)
     trail = models.ForeignKey(Trilha, related_name="tasks", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tasks")
     trail_name = models.TextField(blank=True, null=True)
     id_task = models.TextField(blank=True, null=True)
+    completed_at = models.DateTimeField(null=True, blank=True)  # Data de conclusão
 
     def __str__(self):
         return self.name

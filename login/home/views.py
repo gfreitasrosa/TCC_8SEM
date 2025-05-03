@@ -6,8 +6,10 @@ from django.http import Http404, JsonResponse
 from django.conf import settings
 from django.core.mail import BadHeaderError
 import logging
-
+from django.views.decorators.csrf import csrf_exempt
+from datetime import date, timedelta
 from home import serializers
+from tela_login.models import Usuario
 """from tela_login.models import Profile"""
 
 # Create your views here.
@@ -38,6 +40,25 @@ def help_view(request):
             return JsonResponse({'message': 'Erro ao enviar o e-mail. Tente novamente!'}, status=500)
         
     return render(request, 'tela_home/homePage.html')
+
+@csrf_exempt
+def send_feedback_email(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        recipient_email = request.user.email  # Obtém o e-mail do usuário logado
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [recipient_email],
+                fail_silently=False,
+            )
+            return JsonResponse({'success': True, 'message': 'E-mail enviado com sucesso!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Erro ao enviar e-mail: {e}'})
+    return JsonResponse({'success': False, 'message': 'Método inválido.'})
 
 # views.py
 from django.contrib.auth import update_session_auth_hash
@@ -241,6 +262,23 @@ def update_task(request, task_id):
     if status:
         task.status = status
 
+    if status is not None:
+        task.status = status
+        if status:  # Se a tarefa foi concluída
+            task.completed_at = date.today()
+            task.save()
+
+            # Atualiza os pontos e streaks do usuário
+            profile = request.user
+            if profile.last_task_completed == date.today() - timedelta(days=1):
+                profile.streak += 1  # Incrementa o streak
+            elif profile.last_task_completed != date.today():
+                profile.streak = 1  # Reinicia o streak
+
+            profile.points += 10  # Adiciona pontos (exemplo: 10 pontos por tarefa)
+            profile.last_task_completed = date.today()
+            profile.save()
+
     # Salva a tarefa com os novos dados
     task.save()
 
@@ -248,6 +286,6 @@ def update_task(request, task_id):
     #serializer = TaskSerializer(task)
     #return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({"mensagem":"Sucesso"}, status=200)
-    
-    
+
+
 

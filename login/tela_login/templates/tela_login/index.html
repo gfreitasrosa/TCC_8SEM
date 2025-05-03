@@ -15,11 +15,11 @@
     <form id="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}  <!-- Token de segurança contra CSRF -->
         <div id="login-container">
-            <label for="umail" class="form-label"><b>E-mail</b></label>
-            <input id="umail" type="email" placeholder="Insira seu e-mail cadastrado" name="umail" required>
+            <!-- <label for="umail" class="form-label"><b>E-mail</b></label> -->
+            <input id="umail" type="email" placeholder="E-mail" name="umail" required>
     
-            <label for="pword" class="form-label"><b>Senha</b></label>
-            <input id="pword" type="password" placeholder="Insira sua senha" name="pword" required>
+            <!-- <label for="pword" class="form-label"><b>Senha</b></label> -->
+            <input id="pword" type="password" placeholder="Senha" name="pword" required>
             
             {% if messages %}
             {% for message in messages %}

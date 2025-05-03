@@ -1,3 +1,47 @@
+// Lógica para o popup de feedback
+document.getElementById('helpForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Inclua o token CSRF
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const popup = document.getElementById('feedback-popup');
+        const message = document.getElementById('feedback-message');
+
+        if (data.success) {
+            document.getElementById('helpPopup').style.display = 'none';
+            message.textContent = data.message; // Mensagem de sucesso
+            popup.style.display = 'block';
+            popup.style.backgroundColor = '#d4edda'; // Verde claro para sucesso
+        } else {
+            document.getElementById('helpPopup').style.display = 'none';
+            message.textContent = data.message; // Mensagem de erro
+            popup.style.display = 'block';
+            popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+        }
+    })
+    .catch(error => {
+        const popup = document.getElementById('feedback-popup');
+        const message = document.getElementById('feedback-message');
+        message.textContent = 'Erro ao processar a solicitação. Tente novamente.';
+        popup.style.display = 'block';
+        popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+    });
+});
+
+function closePopup_feeback() {
+    document.getElementById('feedback-popup').style.display = 'none';
+}  
+
 // Function to open the popup for creating a new trail
 function openTrailPopup() {
     setMinDate(); // Ensure date validation is applied
@@ -166,13 +210,13 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             let status = null;
             if (data.resultado.status == 'Concluido'){
                 status = `
-                <option value"Concluido"=>Concluded</option>
-                <option value="Em andamento">Ongoing</option>
+                <option value"Concluido"=>Concluido</option>
+                <option value="Em andamento">Em Progresso</option>
                 `;
             } else {
                 status = `
-                <option value="Em andamento">Ongoing</option>
-                <option value"Concluido">Concluded</option>
+                <option value="Em andamento">Em Progresso</option>
+                <option value"Concluido">Concluido</option>
                 `;
             }
             taskDetailsContainer.innerHTML = `
@@ -322,7 +366,7 @@ function updateProgress() {
     const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     const progressDisplay = document.getElementById("progress-display");
     if (progressDisplay) {
-        progressDisplay.innerText = `Progress: ${progress.toFixed(0)}%`;
+        progressDisplay.innerText = `Progresso: ${progress.toFixed(0)}%`;
     }
 }
 
@@ -453,44 +497,6 @@ profileForm.addEventListener('submit', function(event) {
     .catch(error => {
         console.error('Erro ao atualizar perfil:', error);
         alert('Ocorreu um erro.');
-    });
-});
-
-document.getElementById('helpForm').addEventListener('submit', function(event) {
-    event.preventDefault();  // Previne o comportamento padrão de envio do formulário (que causa o redirecionamento)
-    
-    var subject = document.getElementById('subject').value;
-    var message = document.getElementById('message').value;
-
-    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    // Faz a requisição AJAX
-    fetch('/feedback/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken  // Inclui o CSRF token na requisição
-        },
-        body: JSON.stringify({
-            subject: subject,
-            message: message
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message === 'E-mail enviado com sucesso!') {
-            // Exibe a mensagem de sucesso na mesma página
-            alert(data.message);
-        } else {
-            // Exibe a mensagem de erro
-            alert(data.message);
-        }
-
-        // Fecha o popup (se necessário)
-        document.getElementById('helpPopup').style.display = 'none';
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        alert('Ocorreu um erro ao tentar enviar o e-mail. Tente novamente!');
     });
 });
 
@@ -836,13 +842,3 @@ function adjustPopupSize() {
 // Call on resize and load
 window.addEventListener('resize', adjustPopupSize);
 adjustPopupSize();
-
-
-
-
-
-
-
-
-
-  
