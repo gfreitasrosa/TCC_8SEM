@@ -97,12 +97,12 @@ function displayTrailScreen(name, date, reminder) {
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; background-color: #516ED045; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box;">
     <!-- <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; position: relative;"> -->
     <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin: 0; padding: 0; justify-content: space-between; align-items: center; list-style-type: none; width: 100%; box-sizing: border-box; gap:100px;">
-    <li style="text-decoration: none; display: inline-block;"><label>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete
     </label></li>
-    <li style="text-decoration: none; display: inline-block;"><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 10rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
-    <li style="text-decoration: none; display: inline-block;"><h2>Data final: ${date}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 10rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2>${date}</h2></li>
     </ul>
    <!-- </div> -->
     </div>
