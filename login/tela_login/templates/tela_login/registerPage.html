@@ -16,8 +16,8 @@
         {% csrf_token %}
         <div id="login-container">
             <!-- Nome -->
-            <label for="name" class="form-label"><b>Nome</b></label>
-            <input id="uname" type="text" placeholder="Insira seu nome completo" name="name" required>
+            <label for="name" class="form-label"><b></b></label>
+            <input id="uname" type="text" placeholder="Nome completo" name="name" required>
             <!-- Exibe o erro do campo "nome" -->
             {% if form.nome.errors %}
                 <div class="error-message">
@@ -26,8 +26,8 @@
             {% endif %}
     
             <!-- E-mail -->
-            <label for="email" class="form-label"><b>E-mail</b></label>
-            <input id="umail" type="email" placeholder="Insira seu e-mail" name="email" required>
+            <label for="email" class="form-label"><b></b></label>
+            <input id="umail" type="email" placeholder="E-mail" name="email" required>
             <!-- Exibe o erro do campo "email" -->
             {% if form.email.errors %}
                 <div class="error-message">
@@ -36,8 +36,8 @@
             {% endif %}
     
             <!-- Senha -->
-            <label for="password" class="form-label"><b>Senha</b></label>
-            <input id="pword" type="password" placeholder="Insira sua senha" name="password" required>
+            <label for="password" class="form-label"><b></b></label>
+            <input id="pword" type="password" placeholder="Senha" name="password" required>
             <!-- Exibe o erro do campo "senha" -->
             {% if form.senha.errors %}
                 <div class="error-message">
