@@ -1,10 +1,13 @@
 :root {
-	--bg-color: #e6f0fa;/* #ffffff; */
-	--text-color: #0a0a0a; /* #000000; */
-	--accent-color: #4095e1; /* #516ED0; */
-	--container-bg: #c5e0f8; /* #516ED045; */
-	--card-bg: #f0f6fc; /* #f0f0f0; */
-	--button-hover-color: #3077c7;
+	--bg-color: #f2f4f8;/* #ffffff; */
+	--text-color: #2c2c2c; /* #000000; */
+	--accent-color: #0056b3; /* #516ED0; */
+	--container-bg: #ffffff; /* #516ED045; */
+	--card-bg: #f7f9fc; /* #f0f0f0; */
+	--button-hover-color: #003f8a;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --border-radius: 10px;
+    --transition-speed: 0.3s;
 }
 
 html.dark-theme{
@@ -14,6 +17,11 @@ html.dark-theme{
 	--container-bg: #1e1e1e;
 	--card-bg: #2b2b2b;
 	--button-hover-color: #3c4b65;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+html.dark-theme #dropdown-menu{
+    background-color: #302e2e;
 }
 
 html.cherry-theme{
@@ -23,34 +31,54 @@ html.cherry-theme{
 	--container-bg: #fbd6dd;
 	--card-bg: #fff0f5;
 	--button-hover-color: #dd7399;
+    --shadow-color: rgba(255, 0, 0, 0.2);
+}
+
+html,body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: auto;
 }
 
 html{
 background-color: var(--bg-color);
 font-family: 'Roboto', sans-serif;
 color: var(--text-color);
+transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 body{
+font-family: 'Inter', sans-serif;
 background-color: var(--bg-color);
 color: var(--text-color);
+margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
 }
 
 h1, h2{
+text-align: center;
+font-family: 'Roboto', sans-serif;
 color: var(--text-color);
-font-weight: bold;
+font-weight: 700;
 }
 h1{
-font-size: 24px;
+font-size: 32px;
 margin-bottom: 20px;
 }
 h2{
-font-size: 20px;
+font-size: 24px;
 margin-bottom: 15px;
 }
 label{
+font-weight: bold;
 font-size: 14px;
-color: #555;
+color: var(--text-color);
 margin-bottom: 5px;
 display: block;
 }
@@ -85,22 +113,25 @@ border-radius:25px;
 }
 
 button{
-width: auto;
-height: auto;
-padding: 10px 20px;
-margin-top: 10px;
+width: 100%;
+padding: 12px 0px;
 background-color: var(--accent-color);
 color: white;
 border: none;
-border-radius: 5px;
+border-radius: var(--border-radius);
 cursor: pointer;
 font-weight: bold;
-transition: background-color 0.3s ease, transform 0.2s ease;
+transition: background-color var(--transition-speed), transform var(--transition-speed);
 }
 
 button:hover{
 background-color: var(--button-hover-color);
 transform: translateY(-2px);
+}
+
+button:focus{
+outline: 2px solid var(--accent-color);
+outline-offset: 2px;
 }
 
 #criar-conta-link{
@@ -112,36 +143,42 @@ transform: translateY(-2px);
 #page-container{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    position: relative;
-    width: 90%;
-    max-width: 1850px;
-    height: auto;
+    width: 95%;
+    max-width: 1800px;
     background-color: var(--container-bg);
-    border-radius: 25px;
-    margin-top: 25px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 2%;
+    border-radius: var(--border-radius);
+    padding: 40px;
+    gap: 30px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    box-sizing: border-box;
+    margin: 40px auto;
+    overflow-x: hidden;
 }
 
 #main {
+flex: 2;
 display: flex;
 flex-direction: column;
-justify-content: center; /* Adjust alignment */
+justify-content: flex-start; /* Adjust alignment */
 align-items: center; /* Align content to the start */
 position: relative;
-width: 80%;
-height: 1000px;
-max-width: 1200px;
+width: 100%;
+max-width: 1800px;
 background-color: var(--container-bg);
-border-radius: 1rem;
-margin: 25px auto; /* Centered horizontally */
-padding: 5%;
-overflow: hidden; /* Prevent content overflow */
+border-radius:var(--border-radius);
+margin: 0; /* Centered horizontally */
+padding: 40px;
+transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+overflow: visible; /* Prevent content overflow */
 box-sizing: border-box;
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#main:hover{
+transform: translateY(-5px);
+box-shadow: 0 8px 16px var(--shadow-color);
 }
 
 #create-trail{
@@ -157,17 +194,16 @@ margin-top:0;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    width: 78rem; /* 100% before (delete this) */
-    max-width: 1800px;
+    width: 98%; /* 100% before (delete this) */
+    max-width: 1600px;
     height: auto;
     background-color: var(--accent-color);
     border-radius: 10px;
-    margin-top: 25px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
-    color: white
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    overflow: hidden;
 }
 
 #horizontal-navbar{
@@ -175,7 +211,7 @@ margin-top:0;
     justify-content: center;
     align-items: center;
     position: relative;
-    width: 75rem; /* once was 1500px; */
+    width: 100%; /* once was 1500px; */
     height: auto;
     border-radius: 25px;
     margin-top: 25px;
@@ -184,18 +220,23 @@ margin-top:0;
     }
     #horizontal-navbar ul{
     display: flex;
+    justify-content: space-around;
     flex-direction: row;
     list-style: none;
-    padding: 0;
+    padding: 10px;
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius);
     margin: 0;
-    gap: 20px;
     }
     #horizontal-navbar li{
-    padding: 8px 16px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-speed);
 }
+    #horizontal-navbar li:hover{
+    background-color: rgba(255, 255, 255, 0.4);
+    }
 
 #profilepic{
     position: relative;
@@ -210,34 +251,92 @@ margin-top:0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#dropdown-menu{
+    position: fixed;
+    padding: 10px 0;
+    background-color: var(--container-bg);
+    box-shadow: 0px 8px 16px var(--shadow-color);
+    z-index: 9999; /* Valor alto para garantir que fique acima de outros elementos */
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: dropdownFadeIn 0.3s ease;
+}
+
 #vertical{
+    flex: 0 0 15%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     position: relative;
-    width: 280px;
+    width: 100%;
+    max-width: 1400px;
     height: auto;
-    max-height: 100%;
     background-color: var(--container-bg);
-    border-radius: 15px;
-    margin-top: 25px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
+    border-radius: var(--border-radius);
+    margin: 0;
+    padding: 40px;
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    gap:10px;
+    gap: 20px;
+    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#vertical * {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out; /* Suaviza a opacidade */
+}
+
+#main.expanded {
+    max-width: 1200px; /* Expande o #main */
+    padding: 40px;
+    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#main.collapsed * {
+    max-width: 800px;
+    padding: 20px;
+}
+
+#vertical.collapsed * {
+    transform: scale(0.9); /* Reduz o tamanho do conteúdo */
+    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0; /* Esconde o conteúdo suavemente */
+    padding: 10px;
+    max-width: 100px; /* Encolhe o #vertical */
+}
+
+#vertical.expansed {
+    max-width: 400px;
+    padding: 40px;
 }
 
 #center{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    align-items: flex-start;
     width: 100%;
+    max-width: 1600px;
     justify-content: space-between;
-    gap: 20px;
+    gap: 40px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    box-sizing: border-box;
+    transition: gap 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #nav_hor{
@@ -281,16 +380,20 @@ margin-top:0;
     background-color: #0056b3;
     transform: translateY(-2px);
 }
+    #trail-popup button:focus{
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
 
 /* Popup styling */
 .popup {
-    display: none; /* Hidden by default */
+    display: none; /* Escondido por padrão */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--bg-color);
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -299,13 +402,42 @@ margin-top:0;
 .popup-content {
     background-color: var(--bg-color);
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(-20px);
     font-size: 16px;
     width: 300px;
     text-align: center;
     z-index: 1001;
     }
+
+.popup-open{
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.popup-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    z-index: 100;
+}
+
+    #trail-name{
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    #trail-date{
+        color: #666;
+    }
+
     #trail-name,
     #trail-date{
     width: 100%;
@@ -316,20 +448,53 @@ margin-top:0;
     box-sizing: border-box;
 }
 
+#vertical-navbar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--container-bg);
+    padding: 20px;
+    border-radius: 8px;
+}
+
 #vertical-navbar .trail-card {
-    margin: 10px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
     padding: 15px;
-    background-color: var(--bg-color);
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    background-color: var(--card-bg);
+    border: none;
+    border-radius: var(--border-radius);
     cursor: pointer;
     color: var(--text-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    text-align: center;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     }
+
+    #vertical-navbar .trail-card h2{
+        font-size: 1.2em;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        color: var(--text-color);
+    }
+
     #vertical-navbar .trail-card:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px var(--shadow-color);
+    background-color: var(--accent-color);
+    color: #fff;
 }
 
 #uppermain{
@@ -338,38 +503,62 @@ margin-top:0;
     justify-content: flex-start;
     align-items: center;
     position: relative;
-    width: 1800px;
+    width: 100%;
+    max-width: 1400px;
     height: auto;
     background-color: var(--container-bg);
     border-radius: 25px;
-    margin-top: 25px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     margin-left: auto;
     margin-right: auto;
-    padding: s20px;
+    padding: 40px;
 }
 
 #task-list {
-background-color: var(--container-bg);
-width: 100%;
-padding: 0 10px;
-margin-top: 20px;
-max-height: 100%;
-overflow-y: auto;
-overflow-x: hidden;
-display: flex;
-flex-direction: column; /* Ensure task items stack vertically */
-align-content: center; /* Center task items horizontally */
-align-items: center;
-box-sizing: border-box;
-gap: 10px; /* Space between tasks */
-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: var(--container-bg);
+    width: 100%;
+    padding: 20px; /* Adiciona espaçamento interno */
+    margin-top: 20px;
+    max-height: 400px; /* Limita a altura máxima */
+    overflow-y: auto; /* Permite rolagem vertical */
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column; /* Empilha os itens verticalmente */
+    align-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 15px; /* Espaçamento entre as tasks */
+    border-radius: var(--border-radius); /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+#task-details{
+    width: 100%;
+    max-width: 100%;
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    margin-top: 20px;
+    font-size: 16px;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+#task-details p{
+    max-width: 15rem;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .task-item {
     width: calc(100% - 20px); /* Respect parent padding */
-    max-width: 100%; /* Ensure it doesn't overflow */
+    max-width: 95%; /* Ensure it doesn't overflow */
     box-sizing: border-box;
-    padding: 10px;
+    padding: 15px;
     background-color: var(--card-bg);
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -379,13 +568,18 @@ box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     text-align: center;
     justify-content: center;
-    justify-items: center;
     align-items: center;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     }
     .task-item:hover{
-    background-color: #f1f1f1;
-    transform: translateY(-2px);
+        background-color: var(--accent-color);
+        color: #fff; /* Texto branco no hover */
+        transform: translateY(-3px); /* Elevação ao passar o mouse */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais forte */
 }
 
 .textoAjuda{
@@ -402,105 +596,320 @@ margin-top: 5px;
 .hamburger{
     display: none;
 }
-    @media (max-width: 1200px){
+@media (max-width: 1200px) {
+    /* Ajustar o container principal */
     #page-container {
-    width: 80rem;  /* 100% before (delete this if it works) */ /* Full width on smaller screens */
-    padding: 10px; /* Reduce padding */
+        width: 100%; /* Ocupa toda a largura */
+        padding: 20px; /* Reduz o padding */
     }
-    #horizontal {
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start; /* Align left */
-    padding: 10px;
-    }
-    #horizontal-navbar ul {
-    background-color: var(--accent-color);
-    color: var(text-color);
-    flex-wrap: wrap; /* Allow items to wrap */
-    gap: 10px; /* Add spacing between items */
-    }
+
+    /* Ajustar o layout do #main */
     #main {
-    width: 90%; /* Adjust to fit within smaller screens */
+        max-width: 100%; /* Ocupa toda a largura */
+        padding: 20px; /* Reduz o padding */
     }
+
+    /* Ajustar o layout do #vertical */
     #vertical {
-    width: 100%; /* Full width on small screens */
-    margin: 10px 0; /* Adjust spacing */
+        width: 95%; /* Ocupa toda a largura */
+        margin: 10px 0; /* Ajusta o espaçamento */
+        padding: 20px; /* Reduz o padding */
     }
-    #task-list {
-    max-height: 300px; /* Limit task list height */
-    overflow-y: auto; /* Enable scrolling */
+
+    /* Ajustar o layout do #horizontal-navbar */
+    #horizontal-navbar {
+        flex-direction: column; /* Empilha os itens verticalmente */
+        align-items: flex-start; /* Alinha à esquerda */
+        padding: 10px; /* Reduz o padding */
     }
+
+    #horizontal-navbar ul {
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        gap: 10px; /* Espaçamento entre os itens */
     }
-    /* Further adjustments for very small screens (mobile) */
-    @media (max-width: 768px) {
-    #horizontal{
-    max-width: 80%;
-    }
-    #horizontal-navbar{
-    max-width: 80%;
-    }
-    #horizontal-navbar ul{
-    max-width: 100%;
-    }
+
     #horizontal-navbar li {
-    font-size: 12px; /* Reduce text size */
-    padding: 5px 10px; /* Compact spacing */
+        font-size: 14px; /* Reduz o tamanho da fonte */
+        padding: 5px 10px; /* Compacta os itens */
     }
-    button {
-    background-color: var(--accent-color);
-    width: auto;
-    padding: 8px 12px; /* Adjust button size */
-    font-size: 14px; /* Smaller font */
+
+    /* Ajustar o layout do #traildisp */
+    #traildisp {
+        display: flex;
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        justify-content: space-between; /* Distribui os itens uniformemente */
+        align-items: center; /* Centraliza verticalmente */
+        padding: 10px; /* Reduz o padding */
+        margin: 0;
+        gap: 10px; /* Reduz o espaçamento */
     }
-    #traildisp{
-    flex-direction: row; /* Stack details vertically */
-    align-items: center; /* Center align for cleaner layout */
-    gap: 10px;
-    padding: 15px;
-    font-size: 14px;
-    max-width: 50%;
-    justify-content: flex-start;
-    flex: 1;
-    flex-wrap: wrap;
-    overflow: auto;
+
+    #traildisp li {
+        flex: 1 1 100%; /* Ocupa toda a largura disponível */
+        margin: 5px 0; /* Ajusta o espaçamento */
+        padding: 5px; /* Reduz o padding */
+        text-align: center;
+        list-style: none;
     }
-    #main h1 {
-    font-size: 18px; /* Smaller headings */
+
+    #traildisp h2 {
+        margin: 0; /* Remove margens extras */
+        padding: 0; /* Remove padding extra */
+        font-size: 16px; /* Ajuste o tamanho da fonte */
+        line-height: 1.2; /* Reduz o espaçamento entre linhas */
     }
+
+    /* Ajustar os cards de trilhas */
     #vertical-navbar .trail-card {
-    background-color: var(--card-bg);
-    font-size: 14px;
-    padding: 10px; /* Compact the cards */
+        width: 100%; /* Ocupa toda a largura */
+        margin: 10px 0; /* Ajusta o espaçamento */
+        padding: 10px; /* Reduz o padding */
+        font-size: 14px; /* Reduz o tamanho da fonte */
     }
-    #vertical, #main{
-    max-width: 100%;
+
+    /* Ajustar o layout do #profilepic */
+    #profilepic {
+        width: 80px; /* Reduz o tamanho do perfil */
+        height: 80px;
+        margin-right: 10px;
     }
-    #profilepic{
-    width: 80px;
-    height: 80px;
-    margin-right: 10px;
+
+    /* Ajustar os títulos */
+    h1, h2 {
+        font-size: 20px; /* Reduz o tamanho dos títulos */
+        margin-bottom: 10px; /* Reduz o espaçamento */
+    }
+
+    h1 {
+        font-size: 24px; /* Título principal */
+    }
+
+    h2 {
+        font-size: 18px; /* Subtítulos */
+    }
+
+    /* Ajustar o layout do #center */
+    #center {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        gap: 20px; /* Reduz o espaçamento */
+    }
+
+    /* Ajustar o layout do #uppermain */
+    #uppermain {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout do #task-details */
+    #task-details {
+        font-size: 14px; /* Reduz o tamanho da fonte */
+        padding: 15px; /* Reduz o padding */
+    }
+
+    #task-details p {
+        font-size: 12px; /* Reduz o tamanho da fonte */
+    }
+
+    /* Ajustar o layout do popup */
+    .popup-content {
+        width: 90%; /* Ocupa quase toda a largura */
+        padding: 15px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout dos botões no popup */
+    #trail-popup button {
+        width: 100%; /* Ocupa toda a largura */
+        padding: 10px; /* Reduz o padding */
+        font-size: 14px; /* Reduz o tamanho da fonte */
     }
 }
+    /* Further adjustments for very small screens (mobile) */
+    @media (max-width: 768px) {
+        /* Ajustar o container principal */
+        #page-container {
+            width: 100%; /* Ocupa toda a largura */
+            padding: 20px; /* Reduz o padding */
+        }
+    
+        /* Ajustar o layout do #main */
+        #main {
+            max-width: 100%; /* Ocupa toda a largura */
+            padding: 20px; /* Reduz o padding */
+        }
+    
+        /* Ajustar o layout do #vertical */
+        #vertical {
+            flex: 0 0 auto;
+            max-width: 100%; /* Ocupa toda a largura */
+            padding: 20px; /* Reduz o padding */
+        }
+    
+        /* Ajustar o layout do #task-list */
+        #task-list {
+            max-height: 300px; /* Limita a altura */
+            padding: 10px; /* Reduz o padding */
+        }
+    
+        /* Ajustar os itens da lista de tasks */
+        .task-item {
+            font-size: 14px; /* Reduz o tamanho da fonte */
+            padding: 10px; /* Reduz o padding */
+        }
+    
+        /* Ajustar os botões */
+        button {
+            padding: 10px; /* Reduz o tamanho dos botões */
+            font-size: 14px; /* Reduz o tamanho da fonte */
+        }
+    
+        /* Ajustar o layout do #horizontal-navbar */
+        #horizontal-navbar {
+            flex-direction: column; /* Empilha os itens verticalmente */
+            align-items: flex-start; /* Alinha à esquerda */
+            padding: 10px; /* Reduz o padding */
+        }
+    
+        #horizontal-navbar ul {
+            flex-wrap: wrap; /* Permite que os itens quebrem linha */
+            gap: 10px; /* Espaçamento entre os itens */
+        }
+    
+        #horizontal-navbar li {
+            font-size: 12px; /* Reduz o tamanho da fonte */
+            padding: 5px 10px; /* Compacta os itens */
+        }
+    
+        /* Ajustar o layout do #traildisp */
+        #traildisp {
+            display: flex;
+            flex-wrap: nowrap; /* Permite que os itens quebrem linha */
+            justify-content: space-between; /* Distribui os itens uniformemente */
+            align-items: center; /* Centraliza verticalmente */
+            padding: 10px; /* Reduz o padding */
+            margin: 0;
+            gap: 10px; /* Reduz o espaçamento */
+        }
+    
+        #traildisp li {
+            flex: 1 1 100%; /* Ocupa toda a largura disponível */
+            margin: 5px 0; /* Ajusta o espaçamento */
+            padding: 5px; /* Reduz o padding */
+            text-align: center;
+            list-style: none;
+        }
+
+        #traildisp h2 {
+            margin: 0; /* Remove margens extras */
+            padding: 0; /* Remove padding extra */
+            font-size: 16px; /* Ajuste o tamanho da fonte, se necessário */
+            line-height: 1.2; /* Reduz o espaçamento entre linhas */
+        }
+    
+        /* Ajustar os cards de trilhas */
+        #vertical-navbar .trail-card {
+            width: 100%; /* Ocupa toda a largura */
+            margin: 10px 0; /* Ajusta o espaçamento */
+            padding: 10px; /* Reduz o padding */
+            font-size: 14px; /* Reduz o tamanho da fonte */
+        }
+    
+        /* Ajustar o layout do #profilepic */
+        #profilepic {
+            width: 80px; /* Reduz o tamanho do perfil */
+            height: 80px;
+            margin-right: 10px;
+        }
+    
+        /* Ajustar os títulos */
+        h1, h2 {
+            font-size: 18px; /* Reduz o tamanho dos títulos */
+            margin-bottom: 10px; /* Reduz o espaçamento */
+        }
+    
+        h1 {
+            font-size: 24px; /* Título principal */
+        }
+    
+        h2 {
+            font-size: 20px; /* Subtítulos */
+        }
+    
+        /* Ajustar o layout do #center */
+        #center {
+            flex-direction: column; /* Empilha os elementos verticalmente */
+            gap: 20px; /* Reduz o espaçamento */
+        }
+    
+        /* Ajustar o layout do #uppermain */
+        #uppermain {
+            flex-direction: column; /* Empilha os elementos verticalmente */
+            padding: 20px; /* Reduz o padding */
+        }
+    
+        /* Ajustar o layout do #task-details */
+        #task-details {
+            font-size: 14px; /* Reduz o tamanho da fonte */
+            padding: 15px; /* Reduz o padding */
+        }
+    
+        #task-details p {
+            font-size: 12px; /* Reduz o tamanho da fonte */
+        }
+    
+        /* Ajustar o layout do popup */
+        .popup-content {
+            width: 90%; /* Ocupa quase toda a largura */
+            padding: 15px; /* Reduz o padding */
+        }
+    
+        /* Ajustar o layout dos botões no popup */
+        #trail-popup button {
+            width: 100%; /* Ocupa toda a largura */
+            padding: 10px; /* Reduz o padding */
+            font-size: 14px; /* Reduz o tamanho da fonte */
+        }
+    }
     
 #main ul {
 display: flex;
+flex-wrap: wrap;
 justify-content: space-between; /* Distribute items evenly */
 align-items: center; /* Vertically center items */
 list-style-type: none; /* Remove bullets */
 padding: 0; /* Remove default padding */
-margin: 0; /* Remove default margin */
+margin: 20px 0; /* Remove default margin */
 width: 100%; /* Ensure full width */
 box-sizing: border-box; /* Include padding in dimensions */
-gap: 200px; /* Space between items */
+gap: 20px; /* Space between items */
 }
 
 #main ul li {
-flex: 1; /* Equal space for all items */
+flex: 1 1 calc(33.33% - 20px); /* Equal space for all items */
 text-align: center; /* Center content */
-padding: 10px;
-border-radius: 5px;
-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+padding: 15px;
+border-radius: var(--border-radius);
+box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+#main button{
+    padding: 12px 20px;
+    background-color: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#main button:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-2px); /* Elevação ao passar o mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais forte */
+}
 /* #profilepic{
 	position:relative;
 	width:150px;
@@ -537,7 +946,7 @@ box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 150x; /* Posiciona o menu logo abaixo do círculo */
+    top: 150px; /* Posiciona o menu logo abaixo do círculo */
     left: 0;
     background-color: #00000045;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
@@ -652,7 +1061,7 @@ box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .popup-content {
-    background-color: #fff;
+    background-color: var(--bg-color);
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -686,10 +1095,31 @@ form {
 }
 
 
-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    background-color: var(--container-bg);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+input::placeholder {
+    color: var(--text-color);
+    font-style: italic;
+}
+
+textarea{
+    resize: vertical;
+    height: 100px;
 }
 
 button {
@@ -766,3 +1196,25 @@ button:hover {
     color: white !important; /* Texto branco no botão */
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+input:focus, textarea:focus {
+    box-shadow: 0 0 8px rgba(255, 111, 97, 0.7);
+}
+
+a{
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover{
+    color: var(--accent-color);
+}
