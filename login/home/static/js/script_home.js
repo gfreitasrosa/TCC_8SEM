@@ -139,21 +139,20 @@ function displayTrailScreen(name, date, reminder) {
 
     main.innerHTML = ""; // Clear the main area initially
 
+    progress = updateProgress(); // Call the function to get the progress
+
     // Create the main structure for trail details and tasks
     main.innerHTML = `
     <div style="display: flex; flex-direction: column; width: 100%; max-width: 100%; gap: 20px; height: 100%; background-color: var(--container-bg); padding: 20px; border-radius: 10px; box-sizing: border-box; overflow: hidden;">
     <!-- Top section: Name, Date, Reminder, and Progress -->
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; background-color: #516ED045; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box;">
-    <!-- <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; position: relative;"> -->
     <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin: 0; padding: 0; justify-content: space-between; align-items: center; list-style-type: none; width: 100%; box-sizing: border-box; gap:100px;">
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
-    <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete
-    </label></li>
+    <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
-   <!-- </div> -->
     </div>
 
     <!-- Task management section -->
@@ -172,12 +171,31 @@ function displayTrailScreen(name, date, reminder) {
     </div>
     `;
 
+    // Abrir o popup ao clicar no botão "Criar Task"
     const createTaskButton = document.getElementById("create-task");
     if (createTaskButton) {
         createTaskButton.addEventListener("click", function () {
-            const taskName = prompt("Enter task name:");
+            document.getElementById("create-task-popup").style.display = "flex";
+        });
+    }
+
+    // Fechar o popup ao clicar no botão de fechar
+    const closePopupButton = document.getElementById("close-create-task-popup");
+    if (closePopupButton) {
+        closePopupButton.addEventListener("click", function () {
+            document.getElementById("create-task-popup").style.display = "none";
+        });
+    }
+
+    // Criar a task ao enviar o formulário
+    const createTaskForm = document.getElementById("create-task-form");
+    if (createTaskForm) {
+        createTaskForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const taskName = document.getElementById("task-name").value.trim();
             if (taskName) {
-                const taskId = `${Date.now()}`; // Generate unique ID
+                const taskId = `${Date.now()}`; // Gera um ID único para a task
                 const taskItem = document.createElement("p");
                 taskItem.innerText = taskName;
                 taskItem.classList.add("task-item");
@@ -190,8 +208,14 @@ function displayTrailScreen(name, date, reminder) {
                 const taskList = document.getElementById("task-list");
                 if (taskList) taskList.appendChild(taskItem);
 
-                // Update progress
+                // Atualize o progresso
                 updateProgress();
+
+                // Fechar o popup e limpar o campo de input
+                document.getElementById("create-task-popup").style.display = "none";
+                document.getElementById("task-name").value = "";
+            } else {
+                alert("Por favor, insira um nome para a task.");
             }
         });
     }
@@ -251,22 +275,14 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             }
             taskDetailsContainer.innerHTML = `
             <h3>Detalhe da task</h3>
+
             <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
-            <p>Status: 
-            <select id="task-status">
-            '${status}'
-            </select>
-            </p>
-            <button onclick="deleteTask('${taskId}')">Deletar Task</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Task</button>
+            <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarfa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
+            
             <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
-
-            // Add event listener to status change dropdown
-            const statusDropdown = document.getElementById("task-status");
-            statusDropdown.addEventListener("change", function () {
-                updateTaskStatus(taskId, statusDropdown.value); // Update task status
-            });
             
             tinymce.init({
                 selector: '#task-notes', // Target the textarea with id "task-notes"
@@ -294,14 +310,9 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             taskDetailsContainer.innerHTML = `
             <h3>Task Details</h3>
             <p>Task Name: ${taskName}</p>
-            <p>Status: 
-            <select id="task-status">
-            <option>Em andamento</option>
-            <option>Concluido</option>
-            </select>
-            </p>
-            <button onclick="deleteTask('${taskId}')">Delete Task</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Save Task</button>
+            <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarefa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
             <textarea id="task-notes" placeholder="Task notes..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
 
@@ -320,6 +331,11 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
                         return false;
                     }
                 },
+                content_style: `
+                .mce-container {
+                    z-index: 1000 !important; /* Ajuste o z-index do TinyMCE */
+                }
+            `
             });
             // Lida com diferentes tipos de erro de status
             /*if (response.status === 404) {
@@ -334,17 +350,45 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
 }
 
 //Function to update the task status
-function updateTaskStatus(taskId, status) {
-    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
-    if (taskItem) {
-        // Mark the task as concluded or ongoing based on status
-        if (status === "Concluded") {
-            taskItem.classList.add("concluded");
+async function UpdateTaskStatus(taskName, taskId) {
+    const token = getCookie('auth_token'); // Obtenha o token de autenticação
+    const url = `/home/update-task-status/${taskId}/Concluido/`; // Endpoint para atualizar a tarefa
+
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH', // Usando PATCH para atualizar parcialmente
+            headers: {
+                'Authorization': `Token ${token}`, // Inclua o token de autenticação
+                'Content-Type': 'application/json', // Envia os dados como JSON
+            },
+            body: JSON.stringify({
+                status: 'Concluido', // Define o status como concluído
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Tarefa atualizada com sucesso:', data);
+
+            // Atualize a interface para refletir a conclusão
+            const taskItem = document.querySelector(`[data-id="${taskId}"]`);
+            if (taskItem) {
+                taskItem.classList.add("concluded"); // Adicione uma classe para indicar conclusão
+            }
+
+            // Atualize o progresso
+            updateProgress();
+            // Recarrega a página para atualizar os pontos
+            location.reload();
+
+            // Atualize o progresso da trilha
+            const trailName = document.getElementById("trilha_name").innerText.trim();
+            fetchTrailProgress(trailName);
         } else {
-            taskItem.classList.remove("concluded");
+            console.error('Erro ao atualizar a tarefa:', response.statusText);
         }
-        // Update the progress after changing task status
-        updateProgress();
+    } catch (error) {
+        console.error('Erro na requisição:', error);
     }
 }
 
@@ -650,7 +694,7 @@ async function saveTask(taskName, taskId) {
 }
 
 async function saveOrUpdateTask(taskName, taskId = null) {
-    const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
+    //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
     const taskNotes = tinymce.get('task-notes').getContent(); // Conteúdo do TinyMCE
     const trilhaElement = document.getElementById('trilha_name'); // Nome da trilha
     // Obtenha apenas o texto interno do elemento
@@ -669,7 +713,7 @@ async function saveOrUpdateTask(taskName, taskId = null) {
         let method = null;
         let body = JSON.stringify({
             name: taskName,
-            status: taskStatus,
+            //status: taskStatus,
             notes: taskNotes,
             trail_name: trilhaName,
             id_task: taskId,
@@ -705,7 +749,6 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                     task_id = data.resultado.id;
                     updatedFields = {
                         notes:  taskNotes,
-                        status:  taskStatus
                     };
                     ////
                 } else {
@@ -905,10 +948,45 @@ function adjustPopupSize() {
         popup.style.width = '400px'; // Default width
     }
 }
+
+async function fetchTrailProgress(trailName) {
+    const token = getCookie('auth_token'); // Obtenha o token de autenticação
+    const url = `/home/get_trail_progress/${encodeURIComponent(trailName)}/`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`, // Inclua o token de autenticação
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Progresso da trilha:', data);
+
+            // Atualize o progresso no DOM
+            const progressDisplay = document.getElementById("progress-display");
+            if (progressDisplay) {
+                progressDisplay.innerText = `Progresso: ${data.progress}% (${data.completed_tasks}/${data.total_tasks} concluídas)`;
+            }
+        } else {
+            console.error('Erro ao buscar o progresso da trilha:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+}
+
 // Call on resize and load
 window.addEventListener('resize', adjustPopupSize);
 adjustPopupSize();
 
+// Exemplo: Chamar ao carregar a tela da trilha
+document.addEventListener("DOMContentLoaded", function () {
+    const trailName = document.getElementById("trilha_name").innerText.trim();
+    fetchTrailProgress(trailName);
 
 function toggleTrailList(expand) {
     if (!isTrailSelected) return;
@@ -947,4 +1025,5 @@ document.getElementById("main").addEventListener("mouseenter", () => {
 
 document.getElementById("main").addEventListener("mouseleave", () => {
     toggleTrailList(true); // Expande a lista de trilhas
+
 });

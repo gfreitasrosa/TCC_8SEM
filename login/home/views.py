@@ -245,7 +245,7 @@ def get_task(request, param):
 def update_task(request, task_id):
     try:
         # Obtém a tarefa com o ID fornecido
-        task = Task.objects.get(id=task_id)
+        task = get_object_or_404(Task, id_task=task_id)
     except Task.DoesNotExist:
         return Response({"detail": "Tarefa não encontrada."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -255,16 +255,42 @@ def update_task(request, task_id):
     
     # Atualiza os campos específicos
     notes= request.data.get('notes', None)
-    status = request.data.get('status', None)
 
     if notes:
         task.notes = notes
-    if status:
-        task.status = status
 
+    # Salva a tarefa com os novos dados
+    task.save()
+
+    # Retorna a tarefa atualizada como resposta
+    #serializer = TaskSerializer(task)
+    #return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({"mensagem":"Sucesso"}, status=200)
+
+@api_view(['PATCH'])
+def update_task_status(request, task_id, status):
+    try:
+        # Obtém a tarefa com o ID fornecido
+        task = get_object_or_404(Task, id_task=task_id)
+    except Task.DoesNotExist:
+        return Response({"detail": "Tarefa não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Verifica se o usuário está autenticado e é o proprietário da tarefa
+    if request.user != task.user:
+        return Response({"detail": "Você não tem permissão para atualizar esta tarefa."}, status=status.HTTP_403_FORBIDDEN)
+    
+    # # Atualiza os campos específicos
+    # status = request.data.get('status', None)
+
+    # if status:
+    #     task.status = status
+
+    print(status)
     if status is not None:
         task.status = status
+        print(status)
         if status:  # Se a tarefa foi concluída
+            print(status)
             task.completed_at = date.today()
             task.save()
 
@@ -279,13 +305,34 @@ def update_task(request, task_id):
             profile.last_task_completed = date.today()
             profile.save()
 
+
     # Salva a tarefa com os novos dados
     task.save()
 
-    # Retorna a tarefa atualizada como resposta
-    #serializer = TaskSerializer(task)
-    #return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({"mensagem":"Sucesso"}, status=200)
+    return Response({"message": "Status da tarefa atualizada com sucesso!",
+                    "points": profile.points,
+                    "streak": profile.streak,}, status=200)
 
+@api_view(['GET'])
+def get_trail_progress(request, trail_name):
+    try:
+        # Busca a trilha pelo nome
+        trail = Trilha.objects.get(name=trail_name)
 
+        # Conta o total de tasks e as tasks concluídas
+        total_tasks = Task.objects.filter(trilha=trail).count()
+        completed_tasks = Task.objects.filter(trilha=trail, status="Concluido").count()
 
+        # Calcula a porcentagem de progresso
+        progress = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+
+        return Response({
+            "trail_name": trail_name,
+            "total_tasks": total_tasks,
+            "completed_tasks": completed_tasks,
+            "progress": round(progress, 2)  # Retorna a porcentagem com 2 casas decimais
+        }, status=status.HTTP_200_OK)
+    except Trilha.DoesNotExist:
+        return Response({"error": "Trilha não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

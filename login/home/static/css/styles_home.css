@@ -1058,6 +1058,7 @@ transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);  /* Fundo escuro */
+    z-index: 1050; /* Certifique-se de que seja maior que o z-index do TinyMCE */
 }
 
 .popup-content {
@@ -1068,6 +1069,7 @@ transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 80%;  /* Tamanho do popup */
     max-width: 500px;  /* Limita a largura do popup */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1051; /* Certifique-se de que seja maior que o z-index do TinyMCE */
 }
 
 /* Botão de fechar */
