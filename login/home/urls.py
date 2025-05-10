@@ -18,4 +18,6 @@ urlpatterns = [
     path('home/get_trilhas/', views.get_trilhas, name='get_trilhas'),
     path('home/get_trilhas_nome/<str:nome>/', views.get_trilhas_nome, name='get_trilhas_nome'),
     path('home/send-feedback-email/', views.send_feedback_email, name='send_feedback_email'),
+    path('home/update-task-status/<int:task_id>/<str:status>/', views.update_task_status, name='update_task_status'),
+    path('home/get_trail_progress/<str:trail_name>/', views.get_trail_progress, name='get_trail_progress'),
 ]
