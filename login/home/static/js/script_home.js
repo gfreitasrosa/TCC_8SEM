@@ -21,12 +21,14 @@ document.getElementById('helpForm').addEventListener('submit', function (event) 
             document.getElementById('helpPopup').style.display = 'none';
             message.textContent = data.message; // Mensagem de sucesso
             popup.style.display = 'block';
-            popup.style.backgroundColor = '#d4edda'; // Verde claro para sucesso
+            //popup.style.backgroundColor = '#d4edda'; // Verde claro para sucesso
+            document.getElementById("dropdown-menu").classList.remove("show");
         } else {
             document.getElementById('helpPopup').style.display = 'none';
             message.textContent = data.message; // Mensagem de erro
             popup.style.display = 'block';
-            popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+            //popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+            document.getElementById("dropdown-menu").classList.remove("show");
         }
     })
     .catch(error => {
@@ -34,7 +36,8 @@ document.getElementById('helpForm').addEventListener('submit', function (event) 
         const message = document.getElementById('feedback-message');
         message.textContent = 'Erro ao processar a solicitação. Tente novamente.';
         popup.style.display = 'block';
-        popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+        //popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
+        document.getElementById("dropdown-menu").classList.remove("show");
     });
 });
 
@@ -139,7 +142,7 @@ function displayTrailScreen(name, date, reminder) {
 
     main.innerHTML = ""; // Clear the main area initially
 
-    progress = updateProgress(); // Call the function to get the progress
+    //progress = updateProgress(); // Call the function to get the progress
 
     // Create the main structure for trail details and tasks
     main.innerHTML = `
@@ -150,7 +153,7 @@ function displayTrailScreen(name, date, reminder) {
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
@@ -170,6 +173,11 @@ function displayTrailScreen(name, date, reminder) {
     </div>
     </div>
     `;
+
+    // Buscar a data da trilha dinamicamente
+    fetchTrilhaDate(name);
+
+    fetchTrailProgress(name); // Chama a função para buscar o progresso da trilha
 
     // Abrir o popup ao clicar no botão "Criar Task"
     const createTaskButton = document.getElementById("create-task");
@@ -209,7 +217,7 @@ function displayTrailScreen(name, date, reminder) {
                 if (taskList) taskList.appendChild(taskItem);
 
                 // Atualize o progresso
-                updateProgress();
+                //updateProgress();
 
                 // Fechar o popup e limpar o campo de input
                 document.getElementById("create-task-popup").style.display = "none";
@@ -220,7 +228,7 @@ function displayTrailScreen(name, date, reminder) {
         });
     }
 
-    updateProgress();
+    //updateProgress();
 }
 
 function applyTheme(theme) {
@@ -261,40 +269,29 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
         });
         if (response.ok) {  // Verifica se o status é 2xx
             const data = await response.json();
-            let status = null;
-            if (data.resultado.status == 'Concluido'){
-                status = `
-                <option value"Concluido"=>Concluido</option>
-                <option value="Em andamento">Em Progresso</option>
-                `;
-            } else {
-                status = `
-                <option value="Em andamento">Em Progresso</option>
-                <option value"Concluido">Concluido</option>
-                `;
-            }
-            taskDetailsContainer.innerHTML = `
-            <h3>Detalhe da task</h3>
+            const isCompleted = data.resultado.status === 'Concluido';
 
-            <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Tarefa: ${taskName}</p>
-            <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
-            <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
-            </div> 
-            <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
+            taskDetailsContainer.innerHTML = `
+                <h3>Detalhe da Task</h3>
+                <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Tarefa: ${taskName}</p>
+                <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
+                <button id="delete-task-btn"onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
+                <button id="save-task-btn" ${isCompleted ? 'disabled' : ''} onclick="saveOrUpdateTask('${taskName}', '${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
+                <button id="finalize-task-btn" ${isCompleted ? 'disabled' : ''} onclick="UpdateTaskStatus('${taskName}', '${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
+                </div> 
+                <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;" ${isCompleted ? 'disabled' : ''}></textarea>
             `;
             
             tinymce.init({
                 selector: '#task-notes', // Target the textarea with id "task-notes"
                 plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+                readonly: isCompleted, // Torna o editor somente leitura se a tarefa estiver concluída
                 toolbar: 'undo redo | bold italic | fontfamily fontsize | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
                 menubar: false, // Optional: Disable the menu bar
                 statusbar: false, // Optional: Disable the status bar
                 setup: function (editor) {
                     editor.on('init', function () {
-                        // Carregar conteúdo inicial
-                        editor.setContent(data.resultado.notes);  // Corrigido: Removido o `string()` desnecessário
+                        editor.setContent(data.resultado.notes || ''); // Carregar conteúdo inicial
                     });
                 },
                 fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
@@ -308,13 +305,15 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
                 },
             });
         } else {
+
             taskDetailsContainer.innerHTML = `
-            <h3>Detalhes da Tarefa</h3>
-            <p>Nome da Tarefa: ${taskName}</p>
-            <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarefa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
-            <textarea id="task-notes" placeholder="Anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
+                <h3>Detalhe da Tarefa</h3>
+                <p style="overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
+                <button id="delete-task-btn" onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
+                <button id="save-task-btn" onclick="saveOrUpdateTask('${taskName}', '${taskId}')">Salvar Tarefa</button>
+                <button id="finalize-task-btn"onclick="UpdateTaskStatus('${taskName}', '${taskId}')">Finalizar Tarefa</button>
+                <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
+
             `;
 
             tinymce.init({
@@ -353,14 +352,14 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
 //Function to update the task status
 async function UpdateTaskStatus(taskName, taskId) {
     const token = getCookie('auth_token'); // Obtenha o token de autenticação
-    const url = `/home/update-task-status/${taskId}/Concluido/`; // Endpoint para atualizar a tarefa
+    const url = `/home/update-task-status/${encodeURIComponent(taskId)}/Concluido/`; // Endpoint para atualizar a tarefa
 
     try {
         const response = await fetch(url, {
-            method: 'PATCH', // Usando PATCH para atualizar parcialmente
+            method: 'PATCH',
             headers: {
                 'Authorization': `Token ${token}`, // Inclua o token de autenticação
-                'Content-Type': 'application/json', // Envia os dados como JSON
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 status: 'Concluido', // Define o status como concluído
@@ -369,6 +368,7 @@ async function UpdateTaskStatus(taskName, taskId) {
 
         if (response.ok) {
             const data = await response.json();
+
             console.log('Tarefa concluída com sucesso', data);
             showSuccessPopup("Tarefa concluída");
 
@@ -378,17 +378,31 @@ async function UpdateTaskStatus(taskName, taskId) {
                 taskItem.classList.add("concluded"); // Adicione uma classe para indicar conclusão
             }
 
-            // Atualize o progresso
-            updateProgress();
-            // Recarrega a página para atualizar os pontos
-            location.reload();
+            // Desabilite os botões e o editor
+            document.getElementById("save-task-btn").disabled = true;
+            document.getElementById("finalize-task-btn").disabled = true;
+
+            const editor = tinymce.get('task-notes');
+            if (editor) {
+                editor.mode.set('readonly'); // Torna o editor somente leitura
+                //editor.getBody().setAttribute('contenteditable', false); // Torna o editor somente leitura
+            } else {
+                console.error('Editor não inicializado.');
+            }
 
             // Atualize o progresso da trilha
-            const trailName = document.getElementById("trilha_name").innerText.trim();
-            fetchTrailProgress(trailName);
+            const trilhaElement = document.getElementById("trilha_name");
+            if (trilhaElement) {
+                const trailName = trilhaElement.innerText.trim();
+                fetchTrailProgress(trailName);
+            } else {
+                console.error("Elemento com ID 'trilha_name' não encontrado.");
+            }
         } else {
+
             console.error('Erro ao atualizar a tarefa:', response.statusText);
             showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
+
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
@@ -414,8 +428,19 @@ async function deleteTask(taskId) {
         });
 
         if (response.ok) {
-            console.log("Tarefa excluida com êxito.");
+
+            console.log("Task deleted successfully.");
+             // Atualize o progresso da trilha
+             const trilhaElement = document.getElementById("trilha_name");
+             if (trilhaElement) {
+                 const trailName = trilhaElement.innerText.trim();
+                 fetchTrailProgress(trailName); // Atualiza o progresso
+             } else {
+                 console.error("Elemento com ID 'trilha_name' não encontrado.");
+             }
+
             showSuccessPopup("Tarefa excluída com êxito.");
+
             // Atualizar a interface ou remover a tarefa da lista
         } else {
             console.error("Falhou em deletar task:", response.statusText);
@@ -429,26 +454,28 @@ async function deleteTask(taskId) {
     if (tinymce.get('task-notes')) {
         tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
     }
-    document.getElementById("task-details").innerHTML = "<h3>Selecione uma task para visualizar detalhes</h3>";
-    updateProgress();
+
+    document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
+    //updateProgress();
+
 }
 
 // Function to update progress
-function updateProgress() {
-    const taskList = document.getElementById("task-list");
-    if (!taskList) return;
+// function updateProgress() {
+//     const taskList = document.getElementById("task-list");
+//     if (!taskList) return;
 
-    const totalTasks = taskList.childElementCount;
-    const completedTasks = Array.from(taskList.children).filter(task =>
-    task.classList.contains("concluded")
-    ).length;
+//     const totalTasks = taskList.childElementCount;
+//     const completedTasks = Array.from(taskList.children).filter(task =>
+//     task.classList.contains("concluded")
+//     ).length;
 
-    const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-    const progressDisplay = document.getElementById("progress-display");
-    if (progressDisplay) {
-        progressDisplay.innerText = `Progresso: ${progress.toFixed(0)}%`;
-    }
-}
+//     const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+//     const progressDisplay = document.getElementById("progress-display");
+//     if (progressDisplay) {
+//         progressDisplay.innerText = `Progresso: ${progress.toFixed(0)}%`;
+//     }
+// }
 
 /////// DAQUI PRA BAIXO É ALTERAÇÃO DO ROSA ///////
 
@@ -513,6 +540,13 @@ document.getElementById('closePopup').addEventListener('click', function() {
 window.onclick = function(event) {
     if (event.target === document.getElementById('helpPopup')) {
         document.getElementById('helpPopup').style.display = 'none';
+    }
+};
+
+// Fechar o popup se clicar fora do conteúdo do popup
+window.onclick = function(event) {
+    if (event.target === document.getElementById('feedback-popup')) {
+        document.getElementById('feedback-popup').style.display = 'none';
     }
 };
 
@@ -698,12 +732,14 @@ async function saveTask(taskName, taskId) {
 
     if (response.ok) {
         const task = await response.json();
+        fetchTrailProgress(taskName); // Chama a função para buscar o progresso da trilha
         console.log("Tarefa atualizada com sucesso:", task);
 
         // Exibe o popup de sucesso
         showSuccessPopup("Tarefa atualizada com sucesso");
 
         // Atualize a interface aqui (exemplo: atualize os detalhes da tarefa)
+
     } else {
         alert("Erro ao atualizar a tarefa.");
         showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
@@ -800,7 +836,12 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Tarefa atualizada com sucesso:', data);
+
+                    // Atualize o progresso da trilha
+                    fetchTrailProgress(trilhaName);
+
                     showSuccessPopup("Tarefa atualizada com sucesso");
+
                 } else {
                     console.error('Erro ao atualizar a tarefa:', response.statusText);
                     showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
@@ -823,7 +864,11 @@ async function saveOrUpdateTask(taskName, taskId = null) {
         if (response.ok) {
             const task = await response.json();
             console.log(`Tarefa criada com sucesso`, task);
+
+            fetchTrailProgress(trilhaName);
+
             showSuccessPopup("Tarefa criada com sucesso");
+
         } else {
             alert(`Erro ao criar a tarefa`);
         }
@@ -992,10 +1037,40 @@ async function fetchTrailProgress(trailName) {
             // Atualize o progresso no DOM
             const progressDisplay = document.getElementById("progress-display");
             if (progressDisplay) {
-                progressDisplay.innerText = `Progresso: ${data.progress}% (${data.completed_tasks}/${data.total_tasks} concluídas)`;
+                progressDisplay.innerText = `Progresso: ${data.progress}%`;
             }
         } else {
             console.error('Erro ao buscar o progresso da trilha:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+}
+
+async function fetchTrilhaDate(trailName) {
+    const token = getCookie('auth_token'); // Obtenha o token de autenticação
+    const url = `/home/get_trilha_date/${encodeURIComponent(trailName)}/`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`, // Inclua o token de autenticação
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Data da trilha:', data);
+
+            // Atualize o campo de data no DOM
+            const dateElement = document.querySelector('#traildisp li:nth-child(4) h2');
+            if (dateElement) {
+                dateElement.innerText = data.date;
+            }
+        } else {
+            console.error('Erro ao buscar a data da trilha:', response.statusText);
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
@@ -1008,9 +1083,30 @@ adjustPopupSize();
 
 /* // Exemplo: Chamar ao carregar a tela da trilha
 document.addEventListener("DOMContentLoaded", function () {
+
+    const trilhaElement = document.getElementById("trilha_name");
+    if (trilhaElement) {
+        const trailName = trilhaElement.innerText.trim();
+        fetchTrailProgress(trailName);
+    } else {
+        console.error("Elemento com ID 'trilha_name' não encontrado.");
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const trilhaElement = document.getElementById("trilha_name");
+    if (trilhaElement) {
+        const trailName = trilhaElement.innerText.trim();
+        fetchTrailProgress(trailName);
+    } else {
+        console.error("Elemento com ID 'trilha_name' não encontrado.");
+    }
+});
+
     const trailName = document.getElementById("trilha_name").innerText.trim();
     fetchTrailProgress(trailName);
 }); */
+
 
 function toggleTrailList(expand) {
     if (!isTrailSelected) return;
@@ -1077,3 +1173,4 @@ function showFailedPopup(message) {
     document.getElementById("failed-popup").style.display = "none";
     }, 4000);
 }
+
