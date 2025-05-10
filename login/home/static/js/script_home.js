@@ -44,9 +44,9 @@ function closePopup_feeback() {
 
 // Function to open the popup for creating a new trail
 function openTrailPopup() {
-    setMinDate(); // Ensure date validation is applied
+    setMinDate(); // Certifica que a data mínima é a de hoje
     const popup = document.getElementById("trail-popup");
-    popup.style.display = "flex"; // Display the popup
+    popup.style.display = "flex"; // Mostra o popup
 }
 
 // Add event listener to 'Criar trilha' button
@@ -104,6 +104,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
                 const trailCard = document.createElement("div");
                 trailCard.classList.add("trail-card");
                 trailCard.innerText = trailName;
+                trailCard.setAttribute("title", trailName); 
 
                 // Add click event to open the trail screen
                 trailCard.addEventListener("click", function () {
@@ -128,24 +129,29 @@ document.getElementById("save-trail").addEventListener("click", async function (
     }
 });
 
+let isTrailSelected = false;
 
 // Function to display the trail screen
 function displayTrailScreen(name, date, reminder) {
     const main = document.getElementById("main");
+
+    isTrailSelected = true;
+
     main.innerHTML = ""; // Clear the main area initially
 
     progress = updateProgress(); // Call the function to get the progress
 
     // Create the main structure for trail details and tasks
     main.innerHTML = `
-    <div style="display: flex; flex-direction: column; width: 100%; gap: 20px; height: 100%;">
+    <div style="display: flex; flex-direction: column; width: 100%; max-width: 100%; gap: 20px; height: 100%; background-color: var(--container-bg); padding: 20px; border-radius: 10px; box-sizing: border-box; overflow: hidden;">
     <!-- Top section: Name, Date, Reminder, and Progress -->
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 10px; background-color: #516ED045; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box;">
     <ul id="traildisp" style="display: flex; flex-wrap: nowrap; margin: 0; padding: 0; justify-content: space-between; align-items: center; list-style-type: none; width: 100%; box-sizing: border-box; gap:100px;">
-    <li><label><input type="checkbox" ${reminder ? "checked" : ""}> Lembrete</label></li>
-    <li><h2 id="trilha_name">${name}</h2></li>
-    <li><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
-    <li><h2>${date}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
+    <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
 
@@ -269,10 +275,12 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             }
             taskDetailsContainer.innerHTML = `
             <h3>Detalhe da task</h3>
-            <p>Nome da Task: ${taskName}</p>
+
+            <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
             <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
             <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarfa</button>
             <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
+            
             <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
             
@@ -439,7 +447,17 @@ function updateProgress() {
 /////// DAQUI PRA BAIXO É ALTERAÇÃO DO ROSA ///////
 
 function toggleDropdown() {
+    const profilePic = document.querySelector(".profile-image");
+
     document.getElementById("dropdown-menu").classList.toggle("show");
+
+    if (document.getElementById("dropdown-menu").classList.contains("show")) {
+        const rect = profilePic.getBoundingClientRect();
+
+        // Define a posição do dropdown em relação à janela
+        document.getElementById("dropdown-menu").style.top = `${rect.bottom}px`; // Abaixo do elemento pai
+        document.getElementById("dropdown-menu").style.left = `${rect.left}px`; // Alinha à esquerda do pai
+    }
 }
 
 // Fecha o menu suspenso se o usuário clicar fora dele
@@ -455,7 +473,26 @@ window.onclick = function(event) {
     }
 }
 
- // Abrir o popup ao clicar no link "Ajuda"
+function updateDropdownPosition() {
+    const profilePic = document.getElementById("profilepic");
+
+    if (document.getElementById("dropdown-menu").classList.contains("show")) {
+        const rect = profilePic.getBoundingClientRect();
+
+        // Atualiza a posição do dropdown em relação à janela
+        document.getElementById("dropdown-menu").style.top = `${rect.bottom}px`; // Abaixo da imagem de perfil
+        document.getElementById("dropdown-menu").style.left = `${rect.left}px`; // Alinha à esquerda da imagem de perfil
+    }
+}
+
+// Atualiza a posição do dropdown ao rolar a página
+window.addEventListener("scroll", updateDropdownPosition);
+
+// Atualiza a posição do dropdown ao redimensionar a janela
+window.addEventListener("resize", updateDropdownPosition);
+
+
+ // Abrir o popup ao clicar no link "Feedback"
  document.getElementById('feedbackLink').addEventListener('click', function(event) {
     event.preventDefault();  // Impede a navegação do link
     document.getElementById('helpPopup').style.display = 'flex';
@@ -486,9 +523,16 @@ document.getElementById('closeInfoPopup').addEventListener('click', function() {
 
 // Fechar o popup se clicar fora do conteúdo do popup
 window.addEventListener('click', function(event) {
+    const profilePic = document.getElementById("profilepic");
+
+    // Fecha o dropdown se o clique não for no dropdown ou na imagem de perfil
+    if (!profilePic.contains(event.target) && !document.getElementById("dropdown-menu").contains(event.target)) {
+        document.getElementById("dropdown-menu").classList.remove("show");
+    }
+
     // Verifique se o clique foi fora do conteúdo do popup (não no popup-content)
     if (event.target === document.getElementById('infoPopup')) {
-        document.getElementById('infoPopup').style.display = 'none';
+        document.querySelector('#dropdown-menu #infoPopup').style.display = 'none';
     }
 });
 
@@ -501,7 +545,7 @@ const profileForm = document.getElementById('profile-form');
 // Abrir o popup ao clicar no link "Perfil"
 profileLink.addEventListener('click', function(event) {
     event.preventDefault();  // Impede a navegação
-    profilePopup.style.display = 'block';  // Exibe o popup
+    profilePopup.style.display = 'flex';  // Exibe o popup
 });
 
 // Fechar o popup ao clicar no botão de fechar
@@ -943,4 +987,43 @@ adjustPopupSize();
 document.addEventListener("DOMContentLoaded", function () {
     const trailName = document.getElementById("trilha_name").innerText.trim();
     fetchTrailProgress(trailName);
+
+function toggleTrailList(expand) {
+    if (!isTrailSelected) return;
+
+    const vertical = document.getElementById("vertical");
+    const isSmallScreen = window.matchMedia("(max-width: 1200px)").matches;
+   if (isSmallScreen) {
+    if(expand){
+        vertical.classList.remove("collapsed");
+        vertical.style.maxWidth = "95%"; // Expande para o tamanho máximo
+        vertical.style.maxHeight = "95%"; // Expande para o tamanho máximo
+        vertical.style.padding = "30px";
+    } else {
+        vertical.classList.add("collapsed");
+        vertical.style.maxWidth = "95%"; // Encolhe para o tamanho mínimo
+        vertical.style.maxHeight = "100px"; // Encolhe para o tamanho mínimo
+        vertical.style.padding = "10px";
+    }
+    } else {
+     if (expand) {
+        vertical.classList.remove("collapsed");
+        vertical.style.maxWidth = "280px"; // Expande para o tamanho máximo
+        vertical.style.padding = "30px";
+    } else {
+        vertical.classList.add("collapsed");
+        vertical.style.maxWidth = "100px"; // Encolhe para o tamanho mínimo
+        vertical.style.padding = "10px";
+    }
+}
+}
+
+
+document.getElementById("main").addEventListener("mouseenter", () => {
+    toggleTrailList(false); // Encolhe a lista de trilhas
+});
+
+document.getElementById("main").addEventListener("mouseleave", () => {
+    toggleTrailList(true); // Expande a lista de trilhas
+
 });
