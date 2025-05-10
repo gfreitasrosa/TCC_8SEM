@@ -40,3 +40,11 @@ class Usuario(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+class UserActivity(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Relaciona com o modelo de usuário personalizado
+    date = models.DateField(auto_now_add=True)  # Data do registro
+    active_time = models.DurationField()  # Tempo ativo (armazenado como duração)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.date} - {self.active_time}"

@@ -9,7 +9,7 @@ import logging
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date, timedelta
 from home import serializers
-from tela_login.models import Usuario
+from tela_login.models import Usuario, UserActivity
 """from tela_login.models import Profile"""
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, parser_classes, permission_classes
@@ -369,5 +369,37 @@ def update_profile(request):
 
         user.save()
         return JsonResponse({'success': True, 'message': 'Perfil atualizado com sucesso!'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+from django.utils.timezone import now
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_user_activity(request):
+    user = request.user
+    active_time = request.data.get('active_time')  # Tempo ativo em segundos
+    try:
+        # Converte o tempo ativo para timedelta
+        from datetime import timedelta
+        active_time = timedelta(seconds=int(active_time))
+
+        # Salva ou atualiza o registro do dia
+        activity, created = UserActivity.objects.get_or_create(user=user, date=now().date())
+        activity.active_time += active_time
+        activity.save()
+
+        return JsonResponse({'success': True, 'message': 'Tempo ativo salvo com sucesso!'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_activity(request):
+    user = request.user
+    try:
+        activities = UserActivity.objects.filter(user=user).order_by('date')
+        data = [{'date': activity.date, 'active_time': activity.active_time.total_seconds()} for activity in activities]
+        return JsonResponse({'success': True, 'data': data})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
