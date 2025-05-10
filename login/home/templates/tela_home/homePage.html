@@ -38,7 +38,7 @@
     
     <div id="horizontal">
         <div id="profilepic">
-            <img src="{% static 'images\306232.png' %}" alt="Imagem do Usuário" class="profile-image" onclick="toggleDropdown()">
+            <img src="{% static 'images/logo.png' %}" alt="Imagem do Usuário" class="profile-image" onclick="toggleDropdown()">
             <div id="dropdown-menu" class="dropdown-content">
                 <a href="#profile" id="profile-link"><i class="fas fa-user"></i> Ver Perfil</a>
 
@@ -51,9 +51,6 @@
                         
                         <form id="profile-form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <!-- Campo para mudar a foto -->
-                            <label for="profile-pic">Foto de Perfil</label>
-                            <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
                             
                             <!-- Campo para mudar o e-mail -->
                             <label for="email">E-mail</label>
