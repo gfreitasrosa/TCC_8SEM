@@ -159,13 +159,13 @@ function displayTrailScreen(name, date, reminder) {
     <div style="display: flex; flex-direction: row; gap: 20px; width: 100%; height: 100%; box-sizing: border-box;">
     <!-- Task list -->
     <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 200px; max-height: 100%; background-color: #516ED045; padding: 20px; border-radius: 10px; box-sizing: border-box; overflow-y: auto;">
-    <button id="create-task" style="margin-bottom: 10px;">Criar Task</button>
+    <button id="create-task" style="margin-bottom: 10px;">Criar Tarefa</button>
     <div id="task-list" style="flex-grow: 1; overflow-y: auto; width: 100%;"></div>
     </div>
 
     <!-- Task details -->
     <div id="task-details" style="flex-grow: 1; width: calc(100% - 220px); max-height: 100%; background-color: #516ED045; padding: 20px; border-radius: 10px; box-sizing: border-box; overflow-y: auto;">
-    <h3>Selecione uma task para visualizar os detalhes</h3>
+    <h3>Selecione uma tarefa para visualizar os detalhes</h3>
     </div>
     </div>
     </div>
@@ -276,7 +276,7 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             taskDetailsContainer.innerHTML = `
             <h3>Detalhe da task</h3>
 
-            <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
+            <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Tarefa: ${taskName}</p>
             <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
             <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
             <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
@@ -309,12 +309,12 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             });
         } else {
             taskDetailsContainer.innerHTML = `
-            <h3>Task Details</h3>
-            <p>Task Name: ${taskName}</p>
+            <h3>Detalhes da Tarefa</h3>
+            <p>Nome da Tarefa: ${taskName}</p>
             <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
             <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarefa</button>
             <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
-            <textarea id="task-notes" placeholder="Task notes..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
+            <textarea id="task-notes" placeholder="Anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
 
             tinymce.init({
@@ -369,7 +369,8 @@ async function UpdateTaskStatus(taskName, taskId) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Tarefa atualizada com sucesso:', data);
+            console.log('Tarefa concluída com sucesso', data);
+            showSuccessPopup("Tarefa concluída");
 
             // Atualize a interface para refletir a conclusão
             const taskItem = document.querySelector(`[data-id="${taskId}"]`);
@@ -387,9 +388,11 @@ async function UpdateTaskStatus(taskName, taskId) {
             fetchTrailProgress(trailName);
         } else {
             console.error('Erro ao atualizar a tarefa:', response.statusText);
+            showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
+        showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
     }
 }
 
@@ -411,10 +414,12 @@ async function deleteTask(taskId) {
         });
 
         if (response.ok) {
-            console.log("Task deleted successfully.");
+            console.log("Tarefa excluida com êxito.");
+            showSuccessPopup("Tarefa excluída com êxito.");
             // Atualizar a interface ou remover a tarefa da lista
         } else {
-            console.error("Failed to delete task:", response.statusText);
+            console.error("Falhou em deletar task:", response.statusText);
+            showFailedPopup("Erro ao apagar a tarefa. Tente novamente.");
         }
     } catch (error) {
         console.error("Error:", error);
@@ -424,7 +429,7 @@ async function deleteTask(taskId) {
     if (tinymce.get('task-notes')) {
         tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
     }
-    document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
+    document.getElementById("task-details").innerHTML = "<h3>Selecione uma task para visualizar detalhes</h3>";
     updateProgress();
 }
 
@@ -600,6 +605,7 @@ profileForm.addEventListener('submit', function(event) {
     .then(data => {
         if (data.success) {
             alert('Perfil atualizado com sucesso!');
+            showSuccessPopup("Perfil atualizado com sucesso!");
             profilePopup.style.display = 'none';  // Fechar o popup
         } else {
             alert('Ocorreu um erro ao atualizar o perfil.');
@@ -607,6 +613,7 @@ profileForm.addEventListener('submit', function(event) {
     })
     .catch(error => {
         console.error('Erro ao atualizar perfil:', error);
+        showFailedPopup("Erro ao atualizar o perfil. Tente novamente.");
         alert('Ocorreu um erro.');
     });
 });
@@ -648,11 +655,15 @@ async function saveTrail() {
                 if (response.ok) {
                     const trail = await response.json();
                     console.log("Trilha criada com sucesso:", trail);
+                    // Exibe o popup de sucesso
+                    showSuccessPopup("Trilha criada com sucesso");
+
                     // Atualize a interface aqui (adicione a nova trilha à lista)
                 } else {
                     const errorData = await response.json();
                     console.error("Error details:", errorData);
                     alert("Error saving trail: " + JSON.stringify(errorData));
+                    showFailedPopup("Erro ao criar a trilha. Tente novamente.");
                 }
                     }
         } catch (error) {
@@ -688,9 +699,14 @@ async function saveTask(taskName, taskId) {
     if (response.ok) {
         const task = await response.json();
         console.log("Tarefa atualizada com sucesso:", task);
+
+        // Exibe o popup de sucesso
+        showSuccessPopup("Tarefa atualizada com sucesso");
+
         // Atualize a interface aqui (exemplo: atualize os detalhes da tarefa)
     } else {
         alert("Erro ao atualizar a tarefa.");
+        showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
     }
 }
 
@@ -744,10 +760,11 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                 if (response.ok) {  // Verifica se o status é 2xx
                     const data = await response.json();
                     console.log("Tarefa encontrada:", data.resultado);
+                    showSuccessPopup("Tarefa salva com sucesso");
                     // Se a tarefa existir, use PUT para atualizar
                     method = 'PATCH';
                     //url = `${url}${data.resultado.id}/`;
-                    task_id = data.resultado.id;
+                    task_id = data.resultado.id_task;
                     updatedFields = {
                         notes:  taskNotes,
                     };
@@ -758,18 +775,20 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                         console.error('Tarefa não encontrada');
                     } else {
                         console.error('Erro ao buscar a tarefa:', response.statusText);
+                        showFailedPopup("Não foi possível salvar a tarefa. Tente novamente.");
                     }
                 }
         
             } catch (error) {
                 console.error('Erro ao chamar a função Python:', error);
+                showFailedPopup("Não foi possível salvar a tarefa. Tente novamente.");
             }
         }
 
         
         if (method == 'PATCH') {
             try {
-                const response = await fetch(`/update-task/${task_id}/`, {
+                const response = await fetch(`/home/update-task/${task_id}/`, {
                     method: 'PATCH',  // Usando PATCH para atualizar parcialmente
                     headers: {
                         'Authorization': `Token ${token}`,
@@ -781,8 +800,10 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Tarefa atualizada com sucesso:', data);
+                    showSuccessPopup("Tarefa atualizada com sucesso");
                 } else {
                     console.error('Erro ao atualizar a tarefa:', response.statusText);
+                    showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
                 }
             } catch (error) {
                 console.error('Erro na requisição:', error);
@@ -802,6 +823,7 @@ async function saveOrUpdateTask(taskName, taskId = null) {
         if (response.ok) {
             const task = await response.json();
             console.log(`Tarefa criada com sucesso`, task);
+            showSuccessPopup("Tarefa criada com sucesso");
         } else {
             alert(`Erro ao criar a tarefa`);
         }
@@ -984,11 +1006,11 @@ async function fetchTrailProgress(trailName) {
 window.addEventListener('resize', adjustPopupSize);
 adjustPopupSize();
 
-// Exemplo: Chamar ao carregar a tela da trilha
+/* // Exemplo: Chamar ao carregar a tela da trilha
 document.addEventListener("DOMContentLoaded", function () {
     const trailName = document.getElementById("trilha_name").innerText.trim();
     fetchTrailProgress(trailName);
-});
+}); */
 
 function toggleTrailList(expand) {
     if (!isTrailSelected) return;
@@ -1029,3 +1051,29 @@ document.getElementById("main").addEventListener("mouseleave", () => {
     toggleTrailList(true); // Expande a lista de trilhas
 
 });
+
+function showSuccessPopup(message) {
+    // Define a mensagem do popup
+    document.getElementById("success-message").textContent = message;
+
+    // Exibe o popup
+    document.getElementById("success-popup").style.display = "block";
+
+    // Remove o popup após 4 segundos
+    setTimeout(() => {
+    document.getElementById("success-popup").style.display = "none";
+    }, 4000);
+}
+
+function showFailedPopup(message) {
+    // Define a mensagem do popup
+    document.getElementById("fail-message").textContent = message;
+
+    // Exibe o popup
+    document.getElementById("failed-popup").style.display = "block";
+
+    // Remove o popup após 4 segundos
+    setTimeout(() => {
+    document.getElementById("failed-popup").style.display = "none";
+    }, 4000);
+}
