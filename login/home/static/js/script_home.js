@@ -293,6 +293,81 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
                     editor.on('init', function () {
                         editor.setContent(data.resultado.notes || ''); // Carregar conteúdo inicial
                     });
+
+                    // Detecção de entrada do mouse
+                    document.body.addEventListener('mouseenter', function (e) {
+                    const target = e?.target;
+
+                    // Menu tradicional
+                    if (target?.classList?.contains('tox-menu')) {
+                        toggleTrailList(false);
+                  console.log('Mouse entrou em um menu dropdown (tox-menu)');
+                }
+
+                // Menu dos três pontinhos (overflow toolbar)
+                if (target?.closest('.tox-toolbar__overflow')) {
+                    toggleTrailList(false);
+                console.log('Mouse entrou no menu de três pontinhos (overflow toolbar)');
+                }
+
+                // Itens internos (podem aparecer em qualquer menu)
+                if (target?.classList?.contains('tox-collection__item')) {
+                    toggleTrailList(false);
+                console.log('Mouse sobre item do menu:', target.innerText);
+                }
+                }, true);
+
+                //Detecção de saída do mouse
+                    document.body.addEventListener('mouseleave', function (e) {
+                    const target = e?.target;
+
+                    // Menu tradicional
+                    if (target?.classList?.contains('tox-menu')) {
+                        toggleTrailList(true);
+                  console.log('Mouse saiu de um menu dropdown (tox-menu)');
+                }
+
+                // Menu dos três pontinhos (overflow toolbar)
+                if (target?.closest('.tox-toolbar__overflow')) {
+                    toggleTrailList(true);
+                console.log('Mouse saiu do menu de três pontinhos (overflow toolbar)');
+                }
+
+                // Itens internos (podem aparecer em qualquer menu)
+                if (target?.classList?.contains('tox-collection__item')) {
+                    toggleTrailList(true);
+                console.log('Mouse fora do item do menu:', target.innerText);
+                }
+                }, true);
+
+                    document.body.addEventListener('mouseenter', function (e) {
+                    const target = e?.target;
+
+                    if (target && target.classList && target.classList.contains('tox-menu')) {
+                        toggleTrailList(false);
+                        console.log('Mouse entrou em um menu dropdown!');
+                }
+
+                if (target && target.classList && target.classList.contains('tox-collection__item')) {
+                    toggleTrailList(false);
+                console.log('Mouse sobre item de menu:', target.innerText);
+                }
+                }, true); // O "true" aqui garante captura antes do bubbling
+
+                    document.body.addEventListener('mouseleave', function (e) {
+                    const target = e?.target;
+
+                    if (target && target.classList && target.classList.contains('tox-menu')) {
+                        toggleTrailList(true);
+                        console.log('Mouse saiu de um menu dropdown!');
+                }
+
+                if (target && target.classList && target.classList.contains('tox-collection__item')) {
+                    toggleTrailList(true);
+                console.log('Mouse saiu do item de menu:', target.innerText);
+                }
+                }, true); // O "true" aqui garante captura antes do bubbling
+
                 },
                 fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
                 font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
