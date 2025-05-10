@@ -150,7 +150,7 @@ function displayTrailScreen(name, date, reminder) {
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold; overflow: visible;">Progresso: ${progress}%</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
@@ -278,9 +278,9 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
 
             <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Tarefa: ${taskName}</p>
             <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
-            <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
+            <button onclick="deleteTask('${taskId}')" style="width:32%; border: 1px solid #fff;">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:32%; border: 1px solid #fff;">Salvar Tarefa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:32%; border: 1px solid #fff;">Finalizar Tarefa</button>
             </div> 
             <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
@@ -311,9 +311,9 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             taskDetailsContainer.innerHTML = `
             <h3>Detalhes da Tarefa</h3>
             <p>Nome da Tarefa: ${taskName}</p>
-            <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarefa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
+            <button onclick="deleteTask('${taskId}')" style="width:32%; border: 1px solid #fff;">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:32%; border: 1px solid #fff;">Salvar Tarefa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:32%; border: 1px solid #fff;">Finalizar Tarefa</button>
             <textarea id="task-notes" placeholder="Anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
 
@@ -429,7 +429,7 @@ async function deleteTask(taskId) {
     if (tinymce.get('task-notes')) {
         tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
     }
-    document.getElementById("task-details").innerHTML = "<h3>Selecione uma task para visualizar detalhes</h3>";
+    document.getElementById("task-details").innerHTML = "<h3>Selecione uma tarefa para visualizar detalhes</h3>";
     updateProgress();
 }
 
