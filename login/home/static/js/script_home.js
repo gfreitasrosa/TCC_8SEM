@@ -153,7 +153,7 @@ function displayTrailScreen(name, date, reminder) {
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: 0%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold; overflow: visible;">Progresso: 0%</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
@@ -606,49 +606,46 @@ function getCSRFToken() {
 }
 
 // Capturar os dados do formulário quando o usuário clicar em "Salvar Alterações"
-profileForm.addEventListener('submit', function(event) {
-    event.preventDefault();  // Impede o envio do formulário
+profileForm.addEventListener('submit', async function (event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
     const profilePic = document.getElementById('profile-pic').files[0];
+    const token = getCookie('auth_token'); 
 
-    // Preparar os dados para enviar
+    // Prepare os dados para enviar
     const formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
-    if (profilePic) {
-        formData.append('profile_pic', profilePic);
-    }
+    if (email) formData.append('email', email);
+    if (password) formData.append('password', password);
+    if (profilePic) formData.append('profile_pic', profilePic);
 
     // Obter o token CSRF
     const csrfToken = getCSRFToken();
 
-    // Enviar os dados via Fetch para o back-end
-    fetch('/update-profile/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRFToken': csrfToken,  // Incluindo o token CSRF nos cabeçalhos
-            // 'Authorization': 'Bearer token' (se precisar de autenticação)
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('/update-profile/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Token ${token}`, // Inclua o token de autenticação
+                'X-CSRFToken': csrfToken, // Incluindo o token CSRF nos cabeçalhos
+            },
+        });
+
+        const data = await response.json();
         if (data.success) {
             alert('Perfil atualizado com sucesso!');
-            showSuccessPopup("Perfil atualizado com sucesso!");
-            profilePopup.style.display = 'none';  // Fechar o popup
+            showSuccessPopup(data.message);
+            profilePopup.style.display = 'none'; // Fechar o popup
         } else {
-            alert('Ocorreu um erro ao atualizar o perfil.');
+            alert('Erro ao atualizar o perfil: ' + data.message);
+            showFailedPopup(data.message);
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Erro ao atualizar perfil:', error);
-        showFailedPopup("Erro ao atualizar o perfil. Tente novamente.");
-        alert('Ocorreu um erro.');
-    });
+        showFailedPopup('Erro ao atualizar o perfil. Tente novamente.');
+    }
 });
 
 async function saveTrail() {

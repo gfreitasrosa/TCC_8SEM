@@ -9,7 +9,7 @@ router.register(r'tasks', TaskViewSet)
 
 urlpatterns = [
     path('home/', views.home, name='home'),  # URL home
-    #path('update-profile/', views.update_profile, name='update_profile'),
+    path('update-profile/', views.update_profile, name='update_profile'),
     path('api/', include(router.urls)),
     path('home/get_task/<str:param>/', views.get_task, name='get_task'),
     path('home/update-task/<int:task_id>/', views.update_task, name='update_task_fields'),

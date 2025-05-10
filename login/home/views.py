@@ -11,6 +11,10 @@ from datetime import date, timedelta
 from home import serializers
 from tela_login.models import Usuario
 """from tela_login.models import Profile"""
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view, parser_classes, permission_classes
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 @login_required
@@ -347,3 +351,29 @@ def get_trilha_date(request, trilha_name):
         return JsonResponse({"date": trilha.date.strftime('%Y-%m-%d')})
     except Trilha.DoesNotExist:
         return JsonResponse({"error": "Trilha não encontrada ou não pertence ao usuário."}, status=404)
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])  # Para lidar com uploads de arquivos
+@permission_classes([IsAuthenticated])  # Garante que apenas usuários autenticados possam acessar
+def update_profile(request):
+    user = request.user
+    try:
+        # Atualizar email
+        email = request.data.get('email')
+        if email:
+            user.email = email
+
+        # Atualizar senha
+        password = request.data.get('password')
+        if password:
+            user.set_password(password)
+
+        # Atualizar foto de perfil
+        profile_pic = request.FILES.get('profile_pic')
+        if profile_pic:
+            user.profile.profile_pic = profile_pic  # Supondo que você tenha um modelo de perfil relacionado
+
+        user.save()
+        return JsonResponse({'success': True, 'message': 'Perfil atualizado com sucesso!'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
