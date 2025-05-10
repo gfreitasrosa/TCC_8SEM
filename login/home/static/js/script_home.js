@@ -150,7 +150,7 @@ function displayTrailScreen(name, date, reminder) {
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><label>
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold;">Progresso: ${progress}%</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold; overflow: visible;">Progresso: ${progress}%</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
@@ -292,17 +292,94 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
                 menubar: false, // Optional: Disable the menu bar
                 statusbar: false, // Optional: Disable the status bar
                 setup: function (editor) {
+                    // Configuração do editor TinyMCE
                     editor.on('init', function () {
                         // Carregar conteúdo inicial
                         editor.setContent(data.resultado.notes);  // Corrigido: Removido o `string()` desnecessário
                     });
+
+
+                    // Detecção de entrada do mouse
+                    document.body.addEventListener('mouseenter', function (e) {
+                    const target = e?.target;
+
+                    // Menu tradicional
+                    if (target?.classList?.contains('tox-menu')) {
+                        toggleTrailList(false);
+                  console.log('Mouse entrou em um menu dropdown (tox-menu)');
+                }
+
+                // Menu dos três pontinhos (overflow toolbar)
+                if (target?.closest('.tox-toolbar__overflow')) {
+                    toggleTrailList(false);
+                console.log('Mouse entrou no menu de três pontinhos (overflow toolbar)');
+                }
+
+                // Itens internos (podem aparecer em qualquer menu)
+                if (target?.classList?.contains('tox-collection__item')) {
+                    toggleTrailList(false);
+                console.log('Mouse sobre item do menu:', target.innerText);
+                }
+                }, true);
+
+                //Detecção de saída do mouse
+                    document.body.addEventListener('mouseleave', function (e) {
+                    const target = e?.target;
+
+                    // Menu tradicional
+                    if (target?.classList?.contains('tox-menu')) {
+                        toggleTrailList(true);
+                  console.log('Mouse saiu de um menu dropdown (tox-menu)');
+                }
+
+                // Menu dos três pontinhos (overflow toolbar)
+                if (target?.closest('.tox-toolbar__overflow')) {
+                    toggleTrailList(true);
+                console.log('Mouse saiu do menu de três pontinhos (overflow toolbar)');
+                }
+
+                // Itens internos (podem aparecer em qualquer menu)
+                if (target?.classList?.contains('tox-collection__item')) {
+                    toggleTrailList(true);
+                console.log('Mouse fora do item do menu:', target.innerText);
+                }
+                }, true);
+
+                    document.body.addEventListener('mouseenter', function (e) {
+                    const target = e?.target;
+
+                    if (target && target.classList && target.classList.contains('tox-menu')) {
+                        toggleTrailList(false);
+                        console.log('Mouse entrou em um menu dropdown!');
+                }
+
+                if (target && target.classList && target.classList.contains('tox-collection__item')) {
+                    toggleTrailList(false);
+                console.log('Mouse sobre item de menu:', target.innerText);
+                }
+                }, true); // O "true" aqui garante captura antes do bubbling
+
+                    document.body.addEventListener('mouseleave', function (e) {
+                    const target = e?.target;
+
+                    if (target && target.classList && target.classList.contains('tox-menu')) {
+                        toggleTrailList(true);
+                        console.log('Mouse saiu de um menu dropdown!');
+                }
+
+                if (target && target.classList && target.classList.contains('tox-collection__item')) {
+                    toggleTrailList(true);
+                console.log('Mouse saiu do item de menu:', target.innerText);
+                }
+                }, true); // O "true" aqui garante captura antes do bubbling
+
                 },
                 fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
                 font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
                 image_advtab: false, // Disable advanced image settings
                 file_picker_callback: function(callback, value, meta) {
                     if (meta.filetype === 'image') {
-                        alert('Image uploading is disabled.');
+                        alert('Envio de imagem desativado.');
                         return false;
                     }
                 },
@@ -328,7 +405,7 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
                 image_advtab: false, // Disable advanced image settings
                 file_picker_callback: function(callback, value, meta) {
                     if (meta.filetype === 'image') {
-                        alert('Image uploading is disabled.');
+                        alert('Envio de imagem desativado.');
                         return false;
                     }
                 },
@@ -1020,12 +1097,15 @@ function toggleTrailList(expand) {
 }
 }
 
+const elements = document.querySelectorAll("#main, .mce-container , .mce-edit-area, .mce-content-body, .tox-collection__group, .tox-menu.tox-collection.tox-collection--list.tox-selected-menu");
 
-document.getElementById("main").addEventListener("mouseenter", () => {
-    toggleTrailList(false); // Encolhe a lista de trilhas
-});
+// Adiciona os eventos a cada elemento
+elements.forEach((element) => {
+    element.addEventListener("mouseenter", () => {
+        toggleTrailList(false); // Encolhe a lista de trilhas
+    });
 
-document.getElementById("main").addEventListener("mouseleave", () => {
-    toggleTrailList(true); // Expande a lista de trilhas
-
+    element.addEventListener("mouseleave", () => {
+        toggleTrailList(true); // Expande a lista de trilhas
+    });
 });
