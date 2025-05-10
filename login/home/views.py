@@ -353,7 +353,6 @@ def get_trilha_date(request, trilha_name):
         return JsonResponse({"error": "Trilha não encontrada ou não pertence ao usuário."}, status=404)
 
 @api_view(['POST'])
-@parser_classes([MultiPartParser, FormParser])  # Para lidar com uploads de arquivos
 @permission_classes([IsAuthenticated])  # Garante que apenas usuários autenticados possam acessar
 def update_profile(request):
     user = request.user
@@ -367,11 +366,6 @@ def update_profile(request):
         password = request.data.get('password')
         if password:
             user.set_password(password)
-
-        # Atualizar foto de perfil
-        profile_pic = request.FILES.get('profile_pic')
-        if profile_pic:
-            user.profile.profile_pic = profile_pic  # Supondo que você tenha um modelo de perfil relacionado
 
         user.save()
         return JsonResponse({'success': True, 'message': 'Perfil atualizado com sucesso!'})

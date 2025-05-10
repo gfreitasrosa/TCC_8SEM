@@ -611,14 +611,12 @@ profileForm.addEventListener('submit', async function (event) {
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    const profilePic = document.getElementById('profile-pic').files[0];
-    const token = getCookie('auth_token'); 
+    const token = getCookie('auth_token'); // Obtenha o token de autenticação
 
     // Prepare os dados para enviar
     const formData = new FormData();
     if (email) formData.append('email', email);
     if (password) formData.append('password', password);
-    if (profilePic) formData.append('profile_pic', profilePic);
 
     // Obter o token CSRF
     const csrfToken = getCSRFToken();
