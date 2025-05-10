@@ -4,15 +4,11 @@ function ValidateEmail(input) {
 
   if (input.value.match(validRegex)) {
 	console.log("Email Válido")
-
     return true;
-
   } else {
 	console.log("Email inválido")
     alert("Email inválido!");
 
     return false;
-
   }
-
 }

@@ -15,10 +15,16 @@
     <form id="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}  <!-- Token de segurança contra CSRF -->
         <div id="login-container">
-            <!-- <label for="umail" class="form-label"><b>E-mail</b></label> -->
-            <input id="umail" type="email" placeholder="E-mail" name="umail" required>
+
+            <div id="logo-container">
+                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#1f1f1f"><path d="M168-121q-21 5-36.5-10.5T121-168l35-170 182 182-170 35Zm235-84L205-403l413-413q23-23 57-23t57 23l84 84q23 23 23 57t-23 57L403-205Z"/></svg>
+                <h1 id="site-name">TCC</h1>
+            </div>
+
+            <label for="umail" class="form-label"><b></b></label>
+            <input id="umail" type="email" placeholder="Email" name="umail" required>
     
-            <!-- <label for="pword" class="form-label"><b>Senha</b></label> -->
+            <label for="pword" class="form-label"><b></b></label>
             <input id="pword" type="password" placeholder="Senha" name="pword" required>
             
             {% if messages %}
