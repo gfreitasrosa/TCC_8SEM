@@ -12,7 +12,7 @@ urlpatterns = [
     #path('update-profile/', views.update_profile, name='update_profile'),
     path('api/', include(router.urls)),
     path('home/get_task/<str:param>/', views.get_task, name='get_task'),
-    path('update-task/<int:task_id>/', views.update_task, name='update_task_fields'),
+    path('home/update-task/<int:task_id>/', views.update_task, name='update_task_fields'),
     path('home/get_task_list', views.get_task_list, name='get_task_list'),
     path('home/delete_task/<str:task_id>/', views.delete_task, name='delete_task'),
     path('home/get_trilhas/', views.get_trilhas, name='get_trilhas'),
@@ -20,4 +20,5 @@ urlpatterns = [
     path('home/send-feedback-email/', views.send_feedback_email, name='send_feedback_email'),
     path('home/update-task-status/<int:task_id>/<str:status>/', views.update_task_status, name='update_task_status'),
     path('home/get_trail_progress/<str:trail_name>/', views.get_trail_progress, name='get_trail_progress'),
+    path('home/get_trilha_date/<str:trilha_name>/', views.get_trilha_date, name='get_trilha_date'),
 ]
