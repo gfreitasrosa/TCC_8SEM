@@ -307,13 +307,12 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
         } else {
 
             taskDetailsContainer.innerHTML = `
-                <h3>Detalhe da Tarefa</h3>
-                <p style="overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
-                <button id="delete-task-btn" onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
-                <button id="save-task-btn" onclick="saveOrUpdateTask('${taskName}', '${taskId}')">Salvar Tarefa</button>
-                <button id="finalize-task-btn"onclick="UpdateTaskStatus('${taskName}', '${taskId}')">Finalizar Tarefa</button>
-                <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
-
+            <h3>Detalhes da Tarefa</h3>
+            <p>Nome da Tarefa: ${taskName}</p>
+            <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
+            <textarea id="task-notes" placeholder="Anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
 
             tinymce.init({

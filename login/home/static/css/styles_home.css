@@ -656,6 +656,7 @@ margin-top: 5px;
 .hamburger{
     display: none;
 }
+
 @media (max-width: 1200px) {
     /* Ajustar o container principal */
     #page-container {
@@ -784,6 +785,134 @@ margin-top: 5px;
     }
 }
 
+@media (max-width: 1024px) {
+    /* Ajustar o container principal */
+    #page-container {
+        width: 100%; /* Ocupa toda a largura */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout do #main */
+    #main {
+        max-width: 100%; /* Ocupa toda a largura */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout do #vertical */
+    #vertical {
+        width: 100%; /* Ocupa toda a largura */
+        margin: 10px 0; /* Ajusta o espaçamento */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout do #horizontal-navbar */
+    #horizontal-navbar {
+        flex-direction: column; /* Empilha os itens verticalmente */
+        align-items: flex-start; /* Alinha à esquerda */
+        padding: 10px; /* Reduz o padding */
+    }
+
+    #horizontal-navbar ul {
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        gap: 10px; /* Espaçamento entre os itens */
+    }
+
+    #horizontal-navbar li {
+        font-size: 14px; /* Reduz o tamanho da fonte */
+        padding: 5px 10px; /* Compacta os itens */
+    }
+
+    /* Ajustar o layout do #traildisp */
+    #traildisp {
+        display: flex;
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        justify-content: space-between; /* Distribui os itens uniformemente */
+        align-items: center; /* Centraliza verticalmente */
+        padding: 10px; /* Reduz o padding */
+        margin: 0;
+        gap: 10px; /* Reduz o espaçamento */
+    }
+
+    #traildisp li {
+        flex: 1 1 100%; /* Ocupa toda a largura disponível */
+        margin: 5px 0; /* Ajusta o espaçamento */
+        padding: 5px; /* Reduz o padding */
+        text-align: center;
+        list-style: none;
+    }
+
+    #traildisp h2 {
+        margin: 0; /* Remove margens extras */
+        padding: 0; /* Remove padding extra */
+        font-size: 16px; /* Ajuste o tamanho da fonte */
+        line-height: 1.2; /* Reduz o espaçamento entre linhas */
+    }
+
+    /* Ajustar os cards de trilhas */
+    #vertical-navbar .trail-card {
+        width: 100%; /* Ocupa toda a largura */
+        margin: 10px 0; /* Ajusta o espaçamento */
+        padding: 10px; /* Reduz o padding */
+        font-size: 14px; /* Reduz o tamanho da fonte */
+    }
+
+    /* Ajustar o layout do #profilepic */
+    #profilepic {
+        width: 80px; /* Reduz o tamanho do perfil */
+        height: 80px;
+        margin-right: 10px;
+    }
+
+    /* Ajustar os títulos */
+    h1, h2 {
+        font-size: 20px; /* Reduz o tamanho dos títulos */
+        margin-bottom: 10px; /* Reduz o espaçamento */
+    }
+
+    h1 {
+        font-size: 24px; /* Título principal */
+    }
+
+    h2 {
+        font-size: 18px; /* Subtítulos */
+    }
+
+    /* Ajustar o layout do #center */
+    #center {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        gap: 20px; /* Reduz o espaçamento */
+    }
+
+    /* Ajustar o layout do #uppermain */
+    #uppermain {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout do #task-details */
+    #task-details {
+        font-size: 14px; /* Reduz o tamanho da fonte */
+        padding: 15px; /* Reduz o padding */
+    }
+
+    #task-details p {
+        font-size: 12px; /* Reduz o tamanho da fonte */
+    }
+
+    /* Ajustar o layout do popup */
+    .popup-content {
+        width: 90%; /* Ocupa quase toda a largura */
+        padding: 15px; /* Reduz o padding */
+    }
+
+    /* Ajustar o layout dos botões no popup */
+    #trail-popup button {
+        width: 100%; /* Ocupa toda a largura */
+        padding: 10px; /* Reduz o padding */
+        font-size: 14px; /* Reduz o tamanho da fonte */
+    }
+}
+
     @media (max-width: 768px) {
     /* Ajustar o container principal */
     #page-container {
@@ -799,8 +928,7 @@ margin-top: 5px;
 
     /* Ajustar o layout do #vertical */
     #vertical {
-        flex: 0 0 auto;
-        max-width: 100%; /* Ocupa toda a largura */
+        width: 100%; /* Ocupa toda a largura */
         padding: 15px; /* Reduz o padding */
     }
 
@@ -839,36 +967,15 @@ margin-top: 5px;
         padding: 5px 10px; /* Compacta os itens */
     }
 
-    /* Ajustar o layout do #traildisp */
-    #traildisp {
-        display: flex;
-        flex-wrap: nowrap; /* Permite que os itens quebrem linha */
-        justify-content: space-between; /* Distribui os itens uniformemente */
-        align-items: center; /* Centraliza verticalmente */
-        padding: 10px; /* Reduz o padding */
-        margin: 0;
-        gap: 10px; /* Reduz o espaçamento */
+    /* Ajustar o layout do popup */
+    .popup-content {
+        width: 90%; /* Ocupa quase toda a largura */
+        padding: 15px; /* Reduz o padding */
     }
 
-    #traildisp li {
-        flex: 1 1 100%; /* Ocupa toda a largura disponível */
-        margin: 5px 0; /* Ajusta o espaçamento */
-        padding: 5px; /* Reduz o padding */
-        text-align: center;
-        list-style: none;
-    }
-
-    #traildisp h2 {
-        margin: 0; /* Remove margens extras */
-        padding: 0; /* Remove padding extra */
-        font-size: 16px; /* Ajuste o tamanho da fonte, se necessário */
-        line-height: 1.2; /* Reduz o espaçamento entre linhas */
-    }
-
-    /* Ajustar os cards de trilhas */
-    #vertical-navbar .trail-card {
+    /* Ajustar o layout dos botões no popup */
+    #trail-popup button {
         width: 100%; /* Ocupa toda a largura */
-        margin: 10px 0; /* Ajusta o espaçamento */
         padding: 10px; /* Reduz o padding */
         font-size: 14px; /* Reduz o tamanho da fonte */
     }
@@ -892,41 +999,6 @@ margin-top: 5px;
 
     h2 {
         font-size: 20px; /* Subtítulos */
-    }
-
-    /* Ajustar o layout do #center */
-    #center {
-        flex-direction: column; /* Empilha os elementos verticalmente */
-        gap: 20px; /* Reduz o espaçamento */
-    }
-
-    /* Ajustar o layout do #uppermain */
-    #uppermain {
-        flex-direction: column; /* Empilha os elementos verticalmente */
-        padding: 20px; /* Reduz o padding */
-    }
-
-    /* Ajustar o layout do #task-details */
-    #task-details {
-        font-size: 14px; /* Reduz o tamanho da fonte */
-        padding: 15px; /* Reduz o padding */
-    }
-
-    #task-details p {
-        font-size: 12px; /* Reduz o tamanho da fonte */
-    }
-
-    /* Ajustar o layout do popup */
-    .popup-content {
-        width: 90%; /* Ocupa quase toda a largura */
-        padding: 15px; /* Reduz o padding */
-    }
-
-    /* Ajustar o layout dos botões no popup */
-    #trail-popup button {
-        width: 100%; /* Ocupa toda a largura */
-        padding: 10px; /* Reduz o padding */
-        font-size: 14px; /* Reduz o tamanho da fonte */
     }
 }
     
