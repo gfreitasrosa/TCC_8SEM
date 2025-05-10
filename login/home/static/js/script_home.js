@@ -277,10 +277,11 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             <h3>Detalhe da task</h3>
 
             <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Task: ${taskName}</p>
-            <button onclick="deleteTask('${taskId}')">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')">Salvar Tarfa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')">Finalizar Tarefa</button>
-            
+            <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
+            <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
+            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
+            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
+            </div> 
             <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
             
@@ -987,6 +988,7 @@ adjustPopupSize();
 document.addEventListener("DOMContentLoaded", function () {
     const trailName = document.getElementById("trilha_name").innerText.trim();
     fetchTrailProgress(trailName);
+});
 
 function toggleTrailList(expand) {
     if (!isTrailSelected) return;
