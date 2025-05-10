@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import TrilhaViewSet, TaskViewSet, get_task
+from .views import TrilhaViewSet, TaskViewSet
 
 router = DefaultRouter()
 router.register(r'trails', TrilhaViewSet)
@@ -10,6 +10,8 @@ router.register(r'tasks', TaskViewSet)
 urlpatterns = [
     path('home/', views.home, name='home'),  # URL home
     path('update-profile/', views.update_profile, name='update_profile'),
+    path('save-user-activity/', views.save_user_activity, name='save_user_activity'),  # Salvar tempo ativo
+    path('get-user-activity/', views.get_user_activity, name='get_user_activity'),  # Obter dados de tempo ativo
     path('api/', include(router.urls)),
     path('home/get_task/<str:param>/', views.get_task, name='get_task'),
     path('home/update-task/<int:task_id>/', views.update_task, name='update_task_fields'),

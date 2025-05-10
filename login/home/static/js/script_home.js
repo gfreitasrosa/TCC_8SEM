@@ -537,15 +537,11 @@ document.getElementById('closePopup').addEventListener('click', function() {
 
 // Fechar o popup se clicar fora do conteúdo do popup
 window.onclick = function(event) {
-    if (event.target === document.getElementById('helpPopup')) {
-        document.getElementById('helpPopup').style.display = 'none';
-    }
-};
-
-// Fechar o popup se clicar fora do conteúdo do popup
-window.onclick = function(event) {
     if (event.target === document.getElementById('feedback-popup')) {
         document.getElementById('feedback-popup').style.display = 'none';
+    }
+    if (event.target === document.getElementById('helpPopup')) {
+        document.getElementById('helpPopup').style.display = 'none';
     }
 };
 
@@ -1167,4 +1163,107 @@ function showFailedPopup(message) {
     document.getElementById("failed-popup").style.display = "none";
     }, 4000);
 }
+
+// Timer for user activity tracking
+// let activeTime = 0; // Tempo ativo em segundos
+// let activityInterval;
+
+// // Inicia o contador de tempo ativo
+// function startActivityTimer() {
+//     activityInterval = setInterval(() => {
+//         activeTime++;
+//     }, 1000); // Incrementa a cada segundo
+// }
+
+// Para o contador de tempo ativo e envia os dados para o backend
+async function stopActivityTimer() {
+    clearInterval(activityInterval);
+
+    const token = getCookie('auth_token'); // Obtenha o token de autenticação
+    const csrfToken = getCSRFToken();
+
+    try {
+        const response = await fetch('/save-user-activity/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ active_time: activeTime }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            console.log('Tempo ativo salvo com sucesso!');
+        } else {
+            console.error('Erro ao salvar o tempo ativo:', data.message);
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+}
+
+// Inicia o timer ao carregar a página
+window.addEventListener('load', startActivityTimer);
+
+// Para o timer ao sair da página
+window.addEventListener('beforeunload', stopActivityTimer);
+
+// import Chart from 'chart.js/auto';
+
+// Button to fetch user activity and display chart
+document.getElementById('activity-button').addEventListener('click', async () => {
+    const token = getCookie('auth_token');
+
+    try {
+        const response = await fetch('/get-user-activity/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            const labels = data.data.map(item => item.date);
+            const values = data.data.map(item => item.active_time / 60); // Converte para minutos
+
+            // Exibe o popup
+            document.getElementById('activity-popup').style.display = 'block';
+
+            // Cria o gráfico
+            const ctx = document.getElementById('activity-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tempo Ativo (minutos)',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        } else {
+            console.error('Erro ao carregar os dados de atividade:', data.message);
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+});
+
+document.getElementById('close-activity-popup').addEventListener('click', () => {
+    document.getElementById('activity-popup').style.display = 'none';
+});
 
