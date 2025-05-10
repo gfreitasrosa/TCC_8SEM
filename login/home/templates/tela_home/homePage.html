@@ -147,11 +147,11 @@
 <div id="create-task-popup" class="popup" style="display: none;">
     <div class="popup-content">
         <span class="close-btn" id="close-create-task-popup">&times;</span>
-        <h2>Criar Nova Task</h2>
+        <h2>Criar Nova Tarefa</h2>
         <form id="create-task-form">
-            <label for="task-name">Nome da Task:</label>
-            <input type="text" id="task-name" name="task-name" placeholder="Digite o nome da task" required>
-            <button type="submit" class="btn btn-primary">Criar Task</button>
+            <label for="task-name">Nome da tarefa:</label>
+            <input type="text" id="task-name" name="task-name" placeholder="Digite o nome da tarefa" required>
+            <button type="submit" class="btn btn-primary">Criar tarefa</button>
         </form>
     </div>
 </div>
@@ -163,5 +163,13 @@
         <p id="feedback-message"></p>
     </div>
 </div>
+
+<div id="success-popup" class="popup-notification">
+    <p id="success-message">Tarefa atualizada com sucesso ✓</p>
+</div>
+<div id="failed-popup" class="popup-notification">
+    <p id="fail-message">Falha ao atualizar tarefa, tente novamente ❌</p>
+</div>
+
 </body>
 </html>
