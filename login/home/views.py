@@ -316,12 +316,12 @@ def update_task_status(request, task_id, status):
 @api_view(['GET'])
 def get_trail_progress(request, trail_name):
     try:
-        # Busca a trilha pelo nome
-        trail = Trilha.objects.get(name=trail_name)
+        # Busca a trilha pelo nome e pelo usuário autenticado
+        trail = Trilha.objects.get(name=trail_name, user=request.user)
 
-        # Conta o total de tasks e as tasks concluídas
-        total_tasks = Task.objects.filter(trilha=trail).count()
-        completed_tasks = Task.objects.filter(trilha=trail, status="Concluido").count()
+        # Conta o total de tasks e as tasks concluídas, filtrando pelo usuário
+        total_tasks = Task.objects.filter(trail=trail, user=request.user).count()
+        completed_tasks = Task.objects.filter(trail=trail, user=request.user, status="Concluido").count()
 
         # Calcula a porcentagem de progresso
         progress = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
@@ -333,6 +333,17 @@ def get_trail_progress(request, trail_name):
             "progress": round(progress, 2)  # Retorna a porcentagem com 2 casas decimais
         }, status=status.HTTP_200_OK)
     except Trilha.DoesNotExist:
-        return Response({"error": "Trilha não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Trilha não encontrada ou não pertence ao usuário."}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+from django.http import JsonResponse
+from .models import Trilha
+
+def get_trilha_date(request, trilha_name):
+    try:
+        # Filtra a trilha pelo nome e pelo usuário autenticado
+        trilha = Trilha.objects.get(name=trilha_name, user=request.user)
+        return JsonResponse({"date": trilha.date.strftime('%Y-%m-%d')})
+    except Trilha.DoesNotExist:
+        return JsonResponse({"error": "Trilha não encontrada ou não pertence ao usuário."}, status=404)
