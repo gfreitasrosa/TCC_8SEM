@@ -724,6 +724,7 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
+    const id_task = `${Date.now()}`;
 
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
@@ -751,6 +752,7 @@ async function saveTrail() {
                         name: trailName,
                         date: trailDate,
                         reminder: trailReminder,
+                        id_task: id_task,
                     }),
                 });
         
