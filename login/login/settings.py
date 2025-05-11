@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-#vb$-s1!)e28h^r^juhuar^295zh=4j6$s^h$(2p!n5dh+w)(e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['uniptcc21.pythonanywhere.com']
-
+# ALLOWED_HOSTS = ['uniptcc21.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -161,11 +161,11 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_USER_MODEL = 'tela_login.Usuario'
 
-LOGIN_URL = '/tela_login/'
+LOGIN_URL = '/tela_login/'  # URL da página de login
 
 LOGOUT_REDIRECT_URL = '/tela_login/'
 
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_REDIRECT_URL = '/home/'  # URL para onde o usuário será redirecionado após o login
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP do Gmail

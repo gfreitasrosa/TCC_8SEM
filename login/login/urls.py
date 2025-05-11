@@ -17,10 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tela_login.urls')),
     path('', include('home.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('', lambda request: redirect('tela_login/', permanent=True)),  # Redireciona a URL raiz para 'tela_login/'
 ]
