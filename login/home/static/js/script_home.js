@@ -839,6 +839,7 @@ async function saveOrUpdateTask(taskName, taskId) {
     const csrfToken = getCSRFToken();
 
     console.log(trilhaName);
+    console.log("Task ID:", taskId);
     
     try {
         let task_id = null;
@@ -865,7 +866,6 @@ async function saveOrUpdateTask(taskName, taskId) {
                     'Authorization': `Token ${token}`,
                 },
             });*/
-        console.log("Task ID:", taskId);
         // Verifica se o taskId foi fornecido
         if (taskId) {
             // Faz uma requisição GET para verificar se a tarefa existe
