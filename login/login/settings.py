@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#vb$-s1!)e28h^r^juhuar^295zh=4j6$s^h$(2p!n5dh+w)(e
 DEBUG = True
 
 ALLOWED_HOSTS = ['uniptcc21.pythonanywhere.com']
-# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 
 # Application definition
 

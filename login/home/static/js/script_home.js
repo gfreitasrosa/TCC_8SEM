@@ -865,7 +865,7 @@ async function saveOrUpdateTask(taskName, taskId) {
                     'Authorization': `Token ${token}`,
                 },
             });*/
-            
+        console.log("Task ID:", taskId);
         // Verifica se o taskId foi fornecido
         if (taskId) {
             // Faz uma requisição GET para verificar se a tarefa existe
@@ -907,7 +907,6 @@ async function saveOrUpdateTask(taskName, taskId) {
         
         if (method == 'PATCH') {
             try {
-                console.log("taskId");
                 const response = await fetch(`/home/update-task/${task_id}/`, {
                     method: 'PATCH',  // Usando PATCH para atualizar parcialmente
                     headers: {
@@ -935,7 +934,6 @@ async function saveOrUpdateTask(taskName, taskId) {
             }
         } else {
             // Faz a requisição POST ou PUT
-            console.log("taskId");
             const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -948,7 +946,6 @@ async function saveOrUpdateTask(taskName, taskId) {
 
         if (response.ok) {
             const task = await response.json();
-            console.log("taskId");
             console.log(`Tarefa criada com sucesso`, task);
 
             fetchTrailProgress(trilhaName);
