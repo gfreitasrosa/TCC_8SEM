@@ -165,7 +165,7 @@ LOGIN_URL = '/tela_login/'  # URL da página de login
 
 LOGOUT_REDIRECT_URL = '/tela_login/'
 
-LOGIN_REDIRECT_URL = '/home/'  # URL para onde o usuário será redirecionado após o login
+LOGIN_REDIRECT_URL = '/home/'
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP do Gmail
