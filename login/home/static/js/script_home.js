@@ -813,7 +813,7 @@ async function saveTask(taskName, taskId) {
     }
 }
 
-async function saveOrUpdateTask(taskName, taskId = null) {
+async function saveOrUpdateTask(taskName, taskId) {
     //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
     let taskNotes = null; // Pegue o conteúdo do TinyMCE
     if (taskId) {
