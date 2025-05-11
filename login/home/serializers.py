@@ -11,7 +11,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        
         # Obter o nome da trilha do `validated_data`
         trail_name = validated_data['trail_name']
         

@@ -724,7 +724,6 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
-    const id_task = `${Date.now()}`;
 
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
@@ -752,7 +751,6 @@ async function saveTrail() {
                         name: trailName,
                         date: trailDate,
                         reminder: trailReminder,
-                        id_task: id_task,
                     }),
                 });
         
@@ -786,6 +784,7 @@ async function saveTask(taskName, taskId) {
     const taskNotes = tinymce.get('task-notes').getContent(); // Pegue o conteúdo do TinyMCE
     const token = getCookie('auth_token');  // Supondo que o token esteja no cookie 'auth_token'
     const csrfToken = getCSRFToken();
+    const id_task = `${Date.now()}`; // ID da tarefa
     const response = await fetch(`/api/tasks/${taskId}/`, {
         method: 'POST',
         headers: {
@@ -797,6 +796,7 @@ async function saveTask(taskName, taskId) {
             name: taskName,
             status: taskStatus,
             notes: taskNotes,
+            id_task: id_task,
         }),
     });
 
@@ -907,6 +907,7 @@ async function saveOrUpdateTask(taskName, taskId) {
         
         if (method == 'PATCH') {
             try {
+                console.log("taskId");
                 const response = await fetch(`/home/update-task/${task_id}/`, {
                     method: 'PATCH',  // Usando PATCH para atualizar parcialmente
                     headers: {
@@ -934,6 +935,7 @@ async function saveOrUpdateTask(taskName, taskId) {
             }
         } else {
             // Faz a requisição POST ou PUT
+            console.log("taskId");
             const response = await fetch(url, {
             method: 'POST',
             headers: {
