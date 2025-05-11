@@ -948,6 +948,7 @@ async function saveOrUpdateTask(taskName, taskId) {
 
         if (response.ok) {
             const task = await response.json();
+            console.log("taskId");
             console.log(`Tarefa criada com sucesso`, task);
 
             fetchTrailProgress(trilhaName);
