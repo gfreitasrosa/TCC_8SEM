@@ -494,7 +494,6 @@ async function deleteTask(taskId) {
     const taskToDelete = Array.from(taskList.children).find(
         task => task.dataset.id === taskId
     );
-    if (taskToDelete) taskToDelete.remove();
 
     try {
         const response = await fetch(`delete_task/${encodeURIComponent(taskId)}/`, {
@@ -505,7 +504,7 @@ async function deleteTask(taskId) {
         });
 
         if (response.ok) {
-
+            if (taskToDelete) taskToDelete.remove();
             console.log("Task deleted successfully.");
              // Atualize o progresso da trilha
              const trilhaElement = document.getElementById("trilha_name");
