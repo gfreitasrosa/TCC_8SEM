@@ -75,11 +75,12 @@ TEMPLATES = [
     },
 ]"""
 
-# Configurar o diretório de arquivos estáticos
+# Configuração de arquivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'tela_login/static'),  # Caminho para sua pasta estática
+    os.path.join(BASE_DIR, 'tela_login/static'),  # Diretório de arquivos estáticos durante o desenvolvimento
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Diretório para onde os arquivos serão coletados
 
 # Diretório de templates
 TEMPLATES = [
