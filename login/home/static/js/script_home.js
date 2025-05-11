@@ -204,6 +204,7 @@ function displayTrailScreen(name, date, reminder) {
             const taskName = document.getElementById("task-name").value.trim();
             if (taskName) {
                 const taskId = `${Date.now()}`; // Gera um ID único para a task
+                console.log("Task ID gerado:", taskId);
                 const taskItem = document.createElement("p");
                 taskItem.innerText = taskName;
                 taskItem.classList.add("task-item");
