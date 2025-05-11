@@ -517,6 +517,10 @@ async function deleteTask(taskId) {
 
             showSuccessPopup("Tarefa excluída com êxito.");
 
+                // Clean up TinyMCE editor if it's active
+            if (tinymce.get('task-notes')) {
+                tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
+            }
             // Atualizar a interface ou remover a tarefa da lista
         } else {
             console.error("Falhou em deletar task:", response.statusText);
@@ -526,12 +530,7 @@ async function deleteTask(taskId) {
         console.error("Error:", error);
     }
 
-    // Clean up TinyMCE editor if it's active
-    if (tinymce.get('task-notes')) {
-        tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
-    }
-
-    document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
+    // document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
     //updateProgress();
 
 }
