@@ -200,7 +200,7 @@ function displayTrailScreen(name, date, reminder) {
     if (createTaskForm) {
         createTaskForm.addEventListener("submit", function (event) {
             event.preventDefault(); // Impede o envio padrão do formulário
-
+            
             const taskName = document.getElementById("task-name").value.trim();
             if (taskName) {
                 const taskId = `${Date.now()}`; // Gera um ID único para a task
@@ -218,12 +218,12 @@ function displayTrailScreen(name, date, reminder) {
 
                 // Atualize o progresso
                 //updateProgress();
-                saveOrUpdateTask(taskName);
+                saveOrUpdateTask(taskName, taskId);
                 // Fechar o popup e limpar o campo de input
                 document.getElementById("create-task-popup").style.display = "none";
                 document.getElementById("task-name").value = "";
             } else {
-                alert("Por favor, insira um nome para a task.");
+                null;
             }
         });
     }
@@ -817,7 +817,17 @@ async function saveOrUpdateTask(taskName, taskId = null) {
     //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
     let taskNotes = null; // Pegue o conteúdo do TinyMCE
     if (taskId) {
-        taskNotes = tinymce.get('task-notes').getContent(); // Conteúdo do TinyMCE
+        const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
+        if (editor) { // Verifica se o editor está inicializado
+            const content = editor.getContent(); // Obtém o conteúdo do editor
+            if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
+                taskNotes = content; // Atribui o conteúdo às notas
+            } else {
+                console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
+            }
+        } else {
+            console.log('Editor TinyMCE não inicializado.');
+        }
     }
     const trilhaElement = document.getElementById('trilha_name'); // Nome da trilha
     // Obtenha apenas o texto interno do elemento
