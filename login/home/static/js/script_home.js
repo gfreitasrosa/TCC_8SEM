@@ -473,6 +473,12 @@ async function UpdateTaskStatus(taskName, taskId) {
                 console.error('Editor não inicializado.');
             }
 
+            // Atualize os pontos no DOM
+            const pointsElement = document.getElementById('user-points'); // Supondo que o elemento tenha o ID 'user-points'
+            if (pointsElement) {
+                pointsElement.textContent = `XP: ${data.points}`; // Atualiza os pontos no DOM
+            }
+
             // Atualize o progresso da trilha
             const trilhaElement = document.getElementById("trilha_name");
             if (trilhaElement) {
