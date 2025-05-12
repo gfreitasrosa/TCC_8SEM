@@ -49,15 +49,16 @@ def help_view(request):
 @csrf_exempt
 def send_feedback_email(request):
     if request.method == 'POST':
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
-        recipient_email = request.user.email  # Obtém o e-mail do usuário logado
+        var_subject = request.POST.get('subject')
+        var_message = request.POST.get('message')
+        subject = f'[AnotAí] Feedback do usuário "{request.user.name}" : {var_subject}'
+        message = f'{var_message}'
         try:
             send_mail(
                 subject,
                 message,
                 settings.EMAIL_HOST_USER,
-                [recipient_email],
+                'tcc_unip_21@outlook.com',
                 fail_silently=False,
             )
             return JsonResponse({'success': True, 'message': 'E-mail enviado com sucesso!'})
