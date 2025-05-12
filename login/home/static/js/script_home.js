@@ -829,19 +829,6 @@ async function saveTask(taskName, taskId) {
 async function saveOrUpdateTask(taskName, taskId) {
     //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
     let taskNotes = null; // Pegue o conteúdo do TinyMCE
-    if (taskId) {
-        const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
-        if (editor) { // Verifica se o editor está inicializado
-            const content = editor.getContent(); // Obtém o conteúdo do editor
-            if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
-                taskNotes = content; // Atribui o conteúdo às notas
-            } else {
-                console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
-            }
-        } else {
-            console.log('Editor TinyMCE não inicializado.');
-        }
-    }
     const trilhaElement = document.getElementById('trilha_name'); // Nome da trilha
     // Obtenha apenas o texto interno do elemento
     const trilhaName = trilhaElement.textContent.trim();
@@ -889,6 +876,17 @@ async function saveOrUpdateTask(taskName, taskId) {
                 if (response.ok) {  // Verifica se o status é 2xx
                     const data = await response.json();
                     console.log("Tarefa encontrada:", data.resultado);
+                    const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
+                    if (editor) { // Verifica se o editor está inicializado
+                        const content = editor.getContent(); // Obtém o conteúdo do editor
+                        if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
+                            taskNotes = content; // Atribui o conteúdo às notas
+                        } else {
+                            console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
+                        }
+                    } else {
+                        console.log('Editor TinyMCE não inicializado.');
+                    }
                     showSuccessPopup("Tarefa salva com sucesso");
                     // Se a tarefa existir, use PUT para atualizar
                     method = 'PATCH';
