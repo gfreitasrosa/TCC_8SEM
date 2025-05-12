@@ -1,3 +1,5 @@
+let timerInterval; // Variável global para armazenar o identificador do intervalo
+
 // Lógica para o popup de feedback
 document.getElementById('helpForm').addEventListener('submit', function (event) {
     event.preventDefault(); // Impede o envio padrão do formulário
@@ -1402,6 +1404,7 @@ window.addEventListener("click", (event) => {
     }
 });
 
+
 function startPomodoro() {
     const timerDisplay = document.getElementById("pomodoro-timer");
     if (!timerDisplay) {
@@ -1409,7 +1412,13 @@ function startPomodoro() {
         return;
     }
 
-    let timeRemaining = 25 * 60; // 25 minutos em segundos
+    // Limpa o cronômetro anterior, se existir
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null; // Reseta o identificador do intervalo
+    }
+
+    let timeRemaining = 1 * 60; // 25 minutos em segundos
 
     // Atualiza o display do timer
     function updateTimerDisplay() {
@@ -1419,12 +1428,13 @@ function startPomodoro() {
     }
 
     // Atualiza o timer a cada segundo
-    const timerInterval = setInterval(function () {
+    timerInterval = setInterval(function () {
         if (timeRemaining > 0) {
             timeRemaining--;
             updateTimerDisplay();
         } else {
             clearInterval(timerInterval);
+            timerInterval = null; // Reseta o identificador do intervalo
 
             // Reproduz o som
             const pomodoroSound = document.getElementById("pomodoro-sound");
