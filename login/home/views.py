@@ -57,8 +57,8 @@ def send_feedback_email(request):
             send_mail(
                 subject,
                 message,
-                settings.EMAIL_HOST_USER,
-                'tcc_unip_21@outlook.com',
+                settings.EMAIL_HOST_USER,  # E-mail do remetente
+                ['tcc_unip_21@outlook.com'],  # Lista de destinatários (corrigido)
                 fail_silently=False,
             )
             return JsonResponse({'success': True, 'message': 'E-mail enviado com sucesso!'})

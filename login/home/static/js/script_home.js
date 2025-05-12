@@ -20,24 +20,19 @@ document.getElementById('helpForm').addEventListener('submit', function (event) 
         const message = document.getElementById('feedback-message');
 
         if (data.success) {
+            showSuccessPopup('Feedback enviado com sucesso!');
             document.getElementById('helpPopup').style.display = 'none';
-            message.textContent = data.message; // Mensagem de sucesso
-            popup.style.display = 'block';
-            //popup.style.backgroundColor = '#d4edda'; // Verde claro para sucesso
             document.getElementById("dropdown-menu").classList.remove("show");
         } else {
+            showFailedPopup('Erro ao enviar feedback. Tente novamente.');
             document.getElementById('helpPopup').style.display = 'none';
-            message.textContent = data.message; // Mensagem de erro
-            popup.style.display = 'block';
             //popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
             document.getElementById("dropdown-menu").classList.remove("show");
         }
     })
     .catch(error => {
-        const popup = document.getElementById('feedback-popup');
-        const message = document.getElementById('feedback-message');
-        message.textContent = 'Erro ao processar a solicitação. Tente novamente.';
-        popup.style.display = 'block';
+        showFailedPopup('Erro ao enviar feedback. Tente novamente.');
+        document.getElementById('helpPopup').style.display = 'none';
         //popup.style.backgroundColor = '#f8d7da'; // Vermelho claro para erro
         document.getElementById("dropdown-menu").classList.remove("show");
     });
