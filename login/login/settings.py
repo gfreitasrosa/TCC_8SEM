@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-#vb$-s1!)e28h^r^juhuar^295zh=4j6$s^h$(2p!n5dh+w)(e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = ['uniptcc21.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'django_crontab',
+]
+
+CRONJOBS = [
+    ('0 8 * * *', 'home.views.enviar_email_lembrete'),  # Executa todos os dias às 8h
 ]
 
 MIDDLEWARE = [
@@ -75,11 +80,12 @@ TEMPLATES = [
     },
 ]"""
 
-# Configurar o diretório de arquivos estáticos
+# Configuração de arquivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'tela_login/static'),  # Caminho para sua pasta estática
+    os.path.join(BASE_DIR, 'tela_login/static'),  # Diretório de arquivos estáticos durante o desenvolvimento
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Diretório para onde os arquivos serão coletados
 
 # Diretório de templates
 TEMPLATES = [
@@ -160,7 +166,7 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_USER_MODEL = 'tela_login.Usuario'
 
-LOGIN_URL = '/tela_login/'
+LOGIN_URL = '/tela_login/'  # URL da página de login
 
 LOGOUT_REDIRECT_URL = '/tela_login/'
 

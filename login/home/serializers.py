@@ -11,7 +11,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        
         # Obter o nome da trilha do `validated_data`
         trail_name = validated_data['trail_name']
         
@@ -42,7 +41,7 @@ class TrilhaSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)  # Inclui as tasks da trilha, se necessário
     class Meta:
         model = Trilha
-        fields = ['id', 'name', 'date', 'reminder', 'tasks', 'user']
+        fields = ['id', 'name', 'date', 'reminder', 'tasks', 'notification_time', 'user']
         read_only_fields = ['user']
 
     def create(self, validated_data):

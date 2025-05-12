@@ -82,6 +82,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
+    const notification_time = document.getElementById("notification-time").value;
     const token = getCookie('auth_token'); 
 
 
@@ -102,6 +103,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
                 document.getElementById("trail-name").value = "";
                 document.getElementById("trail-date").value = "";
                 document.getElementById("trail-reminder").checked = false;
+                document.getElementById("notification-time").value = "";
             } else {
                  // Create a new trail card
                 const trailCard = document.createElement("div");
@@ -123,6 +125,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
                 document.getElementById("trail-name").value = "";
                 document.getElementById("trail-date").value = "";
                 document.getElementById("trail-reminder").checked = false;
+                document.getElementById("notification-time").value = "";
                     }
         } catch (error) {
             console.error('Erro na requisição:', error);
@@ -155,7 +158,7 @@ function displayTrailScreen(name, date, reminder) {
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold; overflow: visible;">Progresso: 0%</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5-56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
 
@@ -201,10 +204,11 @@ function displayTrailScreen(name, date, reminder) {
     if (createTaskForm) {
         createTaskForm.addEventListener("submit", function (event) {
             event.preventDefault(); // Impede o envio padrão do formulário
-
+            
             const taskName = document.getElementById("task-name").value.trim();
             if (taskName) {
                 const taskId = `${Date.now()}`; // Gera um ID único para a task
+                console.log("Task ID gerado:", taskId);
                 const taskItem = document.createElement("p");
                 taskItem.innerText = taskName;
                 taskItem.classList.add("task-item");
@@ -219,13 +223,12 @@ function displayTrailScreen(name, date, reminder) {
 
                 // Atualize o progresso
                 //updateProgress();
-
+                saveOrUpdateTask(taskName, taskId);
                 // Fechar o popup e limpar o campo de input
                 document.getElementById("create-task-popup").style.display = "none";
                 document.getElementById("task-name").value = "";
             } else {
-                //alert("Por favor, insira um nome para a task.");
-                showFailedPopup("Por favor, insira um nome para a tarefa.");
+                null;
             }
         });
     }
@@ -385,11 +388,13 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
 
             taskDetailsContainer.innerHTML = `
             <h3>Detalhes da Tarefa</h3>
-            <p>Nome da Tarefa: ${taskName}</p>
-            <button onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
-            <button onclick="saveOrUpdateTask('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
-            <button onclick="UpdateTaskStatus('${taskName}','${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
-            <textarea id="task-notes" placeholder="Anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
+            <p style = "overflow-wrap: break-word; text-overflow: ellipsis; white-space: normal;">Nome da Tarefa: ${taskName}</p>
+            <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 10px;">
+            <button id="delete-task-btn"onclick="deleteTask('${taskId}')" style="width:33%; border: 1px solid #fff;">Deletar Tarefa</button>
+            <button id="save-task-btn" onclick="saveOrUpdateTask('${taskName}', '${taskId}')" style="width:33%; border: 1px solid #fff;">Salvar Tarefa</button>
+            <button id="finalize-task-btn" onclick="UpdateTaskStatus('${taskName}', '${taskId}')" style="width:33%; border: 1px solid #fff;">Finalizar Tarefa</button>
+            </div> 
+            <textarea id="task-notes" placeholder="Comece suas anotações..." style="resize:none; width: 100%; height: 450px; margin-top: 10px; border: 5px;"></textarea>
             `;
 
             tinymce.init({
@@ -493,7 +498,6 @@ async function deleteTask(taskId) {
     const taskToDelete = Array.from(taskList.children).find(
         task => task.dataset.id === taskId
     );
-    if (taskToDelete) taskToDelete.remove();
 
     try {
         const response = await fetch(`delete_task/${encodeURIComponent(taskId)}/`, {
@@ -504,7 +508,7 @@ async function deleteTask(taskId) {
         });
 
         if (response.ok) {
-
+            if (taskToDelete) taskToDelete.remove();
             console.log("Task deleted successfully.");
              // Atualize o progresso da trilha
              const trilhaElement = document.getElementById("trilha_name");
@@ -517,6 +521,11 @@ async function deleteTask(taskId) {
 
             showSuccessPopup("Tarefa excluída com êxito.");
 
+                // Clean up TinyMCE editor if it's active
+            if (tinymce.get('task-notes')) {
+                tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
+            }
+            document.getElementById("task-details").innerHTML = "<h3>Selecione uma tarefa para ver os detalhes</h3>";
             // Atualizar a interface ou remover a tarefa da lista
         } else {
             console.error("Falhou em deletar task:", response.statusText);
@@ -526,13 +535,7 @@ async function deleteTask(taskId) {
         console.error("Error:", error);
     }
 
-    // Clean up TinyMCE editor if it's active
-    if (tinymce.get('task-notes')) {
-        tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
-    }
-
-    document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
-    //updateProgress();
+    
 
 }
 
@@ -723,7 +726,9 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
+    const notification_time = document.getElementById("notification-time").value;
 
+    console.log(notification_time);
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
         const authToken = getAuthToken();  // Função para obter o token de autenticação
@@ -751,12 +756,14 @@ async function saveTrail() {
                         name: trailName,
                         date: trailDate,
                         reminder: trailReminder,
+                        notification_time: notification_time,
                     }),
                 });
         
                 if (response.ok) {
                     const trail = await response.json();
                     console.log("Trilha criada com sucesso:", trail);
+                    console.log("notification-time:", notification_time);
                     // Exibe o popup de sucesso
                     showSuccessPopup("Trilha criada com sucesso");
 
@@ -785,6 +792,7 @@ async function saveTask(taskName, taskId) {
     const taskNotes = tinymce.get('task-notes').getContent(); // Pegue o conteúdo do TinyMCE
     const token = getCookie('auth_token');  // Supondo que o token esteja no cookie 'auth_token'
     const csrfToken = getCSRFToken();
+    const id_task = `${Date.now()}`; // ID da tarefa
     const response = await fetch(`/api/tasks/${taskId}/`, {
         method: 'POST',
         headers: {
@@ -796,6 +804,7 @@ async function saveTask(taskName, taskId) {
             name: taskName,
             status: taskStatus,
             notes: taskNotes,
+            id_task: id_task,
         }),
     });
 
@@ -815,9 +824,22 @@ async function saveTask(taskName, taskId) {
     }
 }
 
-async function saveOrUpdateTask(taskName, taskId = null) {
+async function saveOrUpdateTask(taskName, taskId) {
     //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
-    const taskNotes = tinymce.get('task-notes').getContent(); // Conteúdo do TinyMCE
+    let taskNotes = null; // Pegue o conteúdo do TinyMCE
+    if (taskId) {
+        const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
+        if (editor) { // Verifica se o editor está inicializado
+            const content = editor.getContent(); // Obtém o conteúdo do editor
+            if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
+                taskNotes = content; // Atribui o conteúdo às notas
+            } else {
+                console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
+            }
+        } else {
+            console.log('Editor TinyMCE não inicializado.');
+        }
+    }
     const trilhaElement = document.getElementById('trilha_name'); // Nome da trilha
     // Obtenha apenas o texto interno do elemento
     const trilhaName = trilhaElement.textContent.trim();
@@ -825,6 +847,7 @@ async function saveOrUpdateTask(taskName, taskId = null) {
     const csrfToken = getCSRFToken();
 
     console.log(trilhaName);
+    console.log("Task ID:", taskId);
     
     try {
         let task_id = null;
@@ -851,7 +874,6 @@ async function saveOrUpdateTask(taskName, taskId = null) {
                     'Authorization': `Token ${token}`,
                 },
             });*/
-            
         // Verifica se o taskId foi fornecido
         if (taskId) {
             // Faz uma requisição GET para verificar se a tarefa existe
@@ -1245,56 +1267,86 @@ function showFailedPopup(message) {
     }, 4000);
 }
 
-// Timer for user activity tracking
-// let activeTime = 0; // Tempo ativo em segundos
-// let activityInterval;
+let activeTime = 0; // Tempo ativo em segundos
+let activityInterval;
+let saveInterval;
 
-// // Inicia o contador de tempo ativo
-// function startActivityTimer() {
-//     activityInterval = setInterval(() => {
-//         activeTime++;
-//     }, 1000); // Incrementa a cada segundo
-// }
+// Inicia o contador de tempo ativo
+function startActivityTimer() {
+    activityInterval = setInterval(() => {
+        activeTime++;
+        updateActiveTimeLabel(); // Atualiza a label a cada segundo
+    }, 1000); // Incrementa a cada segundo
 
-// Para o contador de tempo ativo e envia os dados para o backend
-async function stopActivityTimer() {
-    clearInterval(activityInterval);
+    // Salva o tempo ativo no backend a cada 30 segundos
+    saveInterval = setInterval(() => {
+        const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato YYYY-MM-DD
+        updateUserActivity(currentDate, 30); // Atualiza o tempo ativo no backend
+    }, 30000); // 30 segundos
+}
 
+// Atualiza a label com o tempo ativo em minutos
+function updateActiveTimeLabel() {
+    const activeMinutes = Math.floor(activeTime / 60); // Converte para minutos
+    const userActivityLabel = document.getElementById("user-activity");
+    if (userActivityLabel) {
+        userActivityLabel.textContent = activeMinutes; // Atualiza o texto da label
+    }
+}
+
+// Função para atualizar o tempo ativo no backend
+async function updateUserActivity(date, activeTimeToAdd) {
     const token = getCookie('auth_token'); // Obtenha o token de autenticação
-    const csrfToken = getCSRFToken();
 
     try {
-        const response = await fetch('/save-user-activity/', {
-            method: 'POST',
+        const response = await fetch('/update-user-activity/', {
+            method: 'PATCH',
             headers: {
                 'Authorization': `Token ${token}`,
-                'X-CSRFToken': csrfToken,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ active_time: activeTime }),
+            body: JSON.stringify({ date, active_time: activeTimeToAdd }), // Envia a data e o tempo ativo a ser adicionado
         });
 
         const data = await response.json();
         if (data.success) {
-            console.log('Tempo ativo salvo com sucesso!');
+            console.log('Tempo ativo atualizado com sucesso!');
         } else {
-            console.error('Erro ao salvar o tempo ativo:', data.message);
+            console.error('Erro ao atualizar o tempo ativo:', data.message);
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
     }
 }
 
+// Para o contador de tempo ativo e salva os dados finais
+function stopActivityTimer() {
+    clearInterval(activityInterval);
+    clearInterval(saveInterval);
+    const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato YYYY-MM-DD
+    updateUserActivity(currentDate, activeTime); // Salva o tempo ativo final no backend
+}
+
 // Inicia o timer ao carregar a página
-window.addEventListener('load', startActivityTimer);
+window.addEventListener('load', () => {
+    console.log('Página carregada');
+    startActivityTimer();
+});
 
 // Para o timer ao sair da página
-window.addEventListener('beforeunload', stopActivityTimer);
+window.addEventListener('unload', () => {
+    console.log('Página sendo descarregada');
+    stopActivityTimer();
+});
 
-// import Chart from 'chart.js/auto';
+// Referências aos elementos
+const activeTimeButton = document.getElementById("active-time-button");
+const activeTimePopup = document.getElementById("activity-popup");
+const closeActiveTimePopup = document.getElementById("close-activity-popup");
+const activeTimeInfo = document.getElementById("active-time-info");
 
-// Button to fetch user activity and display chart
-document.getElementById('activity-button').addEventListener('click', async () => {
+// Função para buscar e exibir o tempo ativo
+activeTimeButton.addEventListener("click", async () => {
     const token = getCookie('auth_token');
 
     try {
@@ -1307,44 +1359,92 @@ document.getElementById('activity-button').addEventListener('click', async () =>
         });
 
         const data = await response.json();
+        console.log('Dados de atividade do usuário:', data);
+
         if (data.success) {
-            const labels = data.data.map(item => item.date);
-            const values = data.data.map(item => item.active_time / 60); // Converte para minutos
+            // Limpa o conteúdo anterior do popup
+            activeTimeInfo.innerHTML = '';
 
-            // Exibe o popup
-            document.getElementById('activity-popup').style.display = 'block';
+            // Itera sobre o array de dados e exibe cada registro
+            data.data.forEach((activity) => {
+                const date = activity.date;
+                const activeTimeInSeconds = activity.active_time;
+                const activeTimeInMinutes = Math.floor(activeTimeInSeconds / 60);
 
-            // Cria o gráfico
-            const ctx = document.getElementById('activity-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Tempo Ativo (minutos)',
-                        data: values,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                    }],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
+                // Cria um parágrafo para cada registro
+                const activityInfo = document.createElement('p');
+                activityInfo.textContent = `Data: ${date}, Tempo Ativo: ${activeTimeInMinutes} minutos`;
+                activeTimeInfo.appendChild(activityInfo);
             });
+
+            activeTimePopup.style.display = "block"; // Exibe o popup
         } else {
             console.error('Erro ao carregar os dados de atividade:', data.message);
+            activeTimeInfo.textContent = 'Erro ao carregar os dados de atividade.';
+            activeTimePopup.style.display = "block"; // Exibe o popup
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
+        activeTimeInfo.textContent = 'Erro ao carregar os dados de atividade.';
+        activeTimePopup.style.display = "block"; // Exibe o popup
     }
 });
 
-document.getElementById('close-activity-popup').addEventListener('click', () => {
-    document.getElementById('activity-popup').style.display = 'none';
+// Função para fechar o popup
+closeActiveTimePopup.addEventListener("click", () => {
+    activeTimePopup.style.display = "none"; // Esconde o popup
 });
 
+// Fecha o popup se o usuário clicar fora do conteúdo
+window.addEventListener("click", (event) => {
+    if (event.target === activeTimePopup) {
+        activeTimePopup.style.display = "none";
+    }
+});
+
+function startPomodoro() {
+    const timerDisplay = document.getElementById("pomodoro-timer");
+    if (!timerDisplay) {
+        console.error("Elemento com ID 'pomodoro-timer' não encontrado.");
+        return;
+    }
+
+    let timeRemaining = 25 * 60; // 25 minutos em segundos
+
+    // Atualiza o display do timer
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    // Atualiza o timer a cada segundo
+    const timerInterval = setInterval(function () {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+
+            // Reproduz o som
+            const pomodoroSound = document.getElementById("pomodoro-sound");
+            if (pomodoroSound) {
+                pomodoroSound.play();
+            }
+
+            // Altera o título da aba
+            const originalTitle = document.title;
+            document.title = "Pomodoro concluído! 🎉";
+
+            // Restaura o título após 5 segundos
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 5000);
+
+            showSuccessPopup("Pomodoro concluído! Faça uma pausa.");
+        }
+    }, 1000);
+
+    // Inicializa o display do timer
+    updateTimerDisplay();
+}

@@ -7,6 +7,7 @@ class Trilha(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateField()
     reminder = models.BooleanField(default=False)
+    notification_time = models.IntegerField(blank=True, null=True)  # Tempo antes da data final (em dias)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trilhas")
 
     def __str__(self):

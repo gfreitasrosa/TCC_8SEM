@@ -12,6 +12,8 @@ urlpatterns = [
     path('update-profile/', views.update_profile, name='update_profile'),
     path('save-user-activity/', views.save_user_activity, name='save_user_activity'),  # Salvar tempo ativo
     path('get-user-activity/', views.get_user_activity, name='get_user_activity'),  # Obter dados de tempo ativo
+    path('get-user-activity-by-date/', views.get_user_activity_by_date, name='get_user_activity_by_date'),
+    path('update-user-activity/', views.update_user_activity, name='update_user_activity'),
     path('api/', include(router.urls)),
     path('home/get_task/<str:param>/', views.get_task, name='get_task'),
     path('home/update-task/<int:task_id>/', views.update_task, name='update_task_fields'),

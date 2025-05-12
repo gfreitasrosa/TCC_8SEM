@@ -46,5 +46,8 @@ class UserActivity(models.Model):
     date = models.DateField(auto_now_add=True)  # Data do registro
     active_time = models.DurationField()  # Tempo ativo (armazenado como duração)
 
+    class Meta:
+        unique_together = ('user', 'date')  # Garante que cada usuário tenha apenas um registro por data
+    
     def __str__(self):
         return f"{self.user.email} - {self.date} - {self.active_time}"
