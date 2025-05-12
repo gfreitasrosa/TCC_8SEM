@@ -825,6 +825,10 @@ margin-top: 5px;
         font-size: 14px; /* Reduz o tamanho da fonte */
     }
 
+    #nav_hor li[data-tooltip-top]::before {
+        top: -80%; /* Ajusta a posição da tooltip */
+    }
+
     /* Ajustar o layout do #profilepic */
     #profilepic {
         width: 80px; /* Reduz o tamanho do perfil */
@@ -917,6 +921,10 @@ margin-top: 5px;
     #horizontal-navbar li {
         font-size: 14px; /* Reduz o tamanho da fonte */
         padding: 5px 10px; /* Compacta os itens */
+    }
+
+    #nav_hor li[data-tooltip-top]::before {
+        top: -80%; /* Ajusta a posição da tooltip */
     }
 
     /* Ajustar o layout do #traildisp */
@@ -1068,6 +1076,10 @@ margin-top: 5px;
     .popup-content {
         width: 90%; /* Ocupa quase toda a largura */
         padding: 15px; /* Reduz o padding */
+    }
+
+    #nav_hor li[data-tooltip-top]::before {
+        top: -80%; /* Ajusta a posição da tooltip */
     }
 
     /* Ajustar o layout dos botões no popup */
