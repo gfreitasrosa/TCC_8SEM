@@ -395,21 +395,26 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             `;
 
             tinymce.init({
-                selector: '#task-notes', // Target the textarea with id "task-notes"
-                plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
-                toolbar: 'undo redo | bold italic | fontfamily fontsize | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
-                menubar: false, // Optional: Disable the menu bar
-                statusbar: false, // Optional: Disable the status bar
-                fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
-                font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
-                image_advtab: false, // Disable advanced image settings
-                file_picker_callback: function(callback, value, meta) {
-                    if (meta.filetype === 'image') {
-                        alert('Image uploading is disabled.');
-                        return false;
-                    }
-                },
-                content_style: `
+            selector: '#task-notes', // Target the textarea with id "task-notes"
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar: 'undo redo | bold italic | fontfamily fontsize | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
+            menubar: false, // Optional: Disable the menu bar
+            statusbar: false, // Optional: Disable the status bar
+            fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
+            font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
+            image_advtab: false, // Disable advanced image settings
+            file_picker_callback: function(callback, value, meta) {
+                if (meta.filetype === 'image') {
+                    alert('Image uploading is disabled.');
+                    return false;
+                }
+            },
+            setup: function(editor) {
+                editor.on('init', function() {
+                    editor.setContent(''); // Inicializa o editor com conteúdo vazio
+                });
+            },
+            content_style: `
                 .mce-container {
                     z-index: 1000 !important; /* Ajuste o z-index do TinyMCE */
                 }
