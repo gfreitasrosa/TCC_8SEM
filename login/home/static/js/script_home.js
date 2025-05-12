@@ -1418,7 +1418,7 @@ function startPomodoro() {
         timerInterval = null; // Reseta o identificador do intervalo
     }
 
-    let timeRemaining = 1 * 60; // 25 minutos em segundos
+    let timeRemaining = 0.1 * 60; // 25 minutos em segundos
 
     // Atualiza o display do timer
     function updateTimerDisplay() {
