@@ -373,24 +373,39 @@ def update_profile(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
 
+from datetime import timedelta
 from django.utils.timezone import now
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_user_activity(request):
     user = request.user
     active_time = request.data.get('active_time')  # Tempo ativo em segundos
+
+    if active_time is None:
+        return JsonResponse({'success': False, 'message': 'Campo active_time é obrigatório.'}, status=400)
+
     try:
         # Converte o tempo ativo para timedelta
-        from datetime import timedelta
         active_time = timedelta(seconds=int(active_time))
 
-        # Salva ou atualiza o registro do dia
-        activity, created = UserActivity.objects.get_or_create(user=user, date=now().date())
-        activity.active_time += active_time
-        activity.save()
+        # Tenta buscar o registro existente
+        activity = UserActivity.objects.filter(user=user, date=now().date()).first()
+
+        if activity:
+            # Atualiza o tempo ativo se o registro já existir
+            activity.active_time += active_time
+            activity.save()
+        else:
+            # Cria um novo registro se não existir
+            UserActivity.objects.create(user=user, date=now().date(), active_time=active_time)
 
         return JsonResponse({'success': True, 'message': 'Tempo ativo salvo com sucesso!'})
+    except ValueError:
+        return JsonResponse({'success': False, 'message': 'Valor inválido para active_time.'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
 
@@ -402,6 +417,59 @@ def get_user_activity(request):
         activities = UserActivity.objects.filter(user=user).order_by('date')
         data = [{'date': activity.date, 'active_time': activity.active_time.total_seconds()} for activity in activities]
         return JsonResponse({'success': True, 'data': data})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_activity_by_date(request):
+    user = request.user
+    date = request.query_params.get('date')  # Data fornecida como parâmetro na URL
+
+    if not date:
+        return JsonResponse({'success': False, 'message': 'O parâmetro "date" é obrigatório.'}, status=400)
+
+    try:
+        # Busca o registro para o usuário e a data fornecida
+        activity = UserActivity.objects.filter(user=user, date=date).first()
+
+        if activity:
+            data = {
+                'date': activity.date,
+                'active_time': activity.active_time.total_seconds()  # Converte timedelta para segundos
+            }
+            return JsonResponse({'success': True, 'data': data}, status=200)
+        else:
+            return JsonResponse({'success': False, 'message': 'Nenhum registro encontrado para a data fornecida.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_user_activity(request):
+    user = request.user
+    date = request.data.get('date')  # Data fornecida no corpo da requisição
+    active_time = request.data.get('active_time')  # Tempo ativo em segundos
+
+    if not date or active_time is None:
+        return JsonResponse({'success': False, 'message': 'Os campos "date" e "active_time" são obrigatórios.'}, status=400)
+
+    try:
+        # Converte o tempo ativo para timedelta
+        active_time = timedelta(seconds=int(active_time))
+
+        # Busca o registro para o usuário e a data fornecida
+        activity = UserActivity.objects.filter(user=user, date=date).first()
+
+        if activity:
+            # Atualiza o tempo ativo
+            activity.active_time += active_time
+            activity.save()
+            return JsonResponse({'success': True, 'message': 'Tempo ativo atualizado com sucesso!'}, status=200)
+        else:
+            return JsonResponse({'success': False, 'message': 'Nenhum registro encontrado para a data fornecida.'}, status=404)
+    except ValueError:
+        return JsonResponse({'success': False, 'message': 'Valor inválido para active_time.'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
 

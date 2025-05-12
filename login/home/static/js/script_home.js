@@ -157,7 +157,7 @@ function displayTrailScreen(name, date, reminder) {
     <input type="checkbox" ${reminder ? "checked" : ""}> Lembrete </label></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="trilha_name" style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">${name}</h2></li>
     <li style="text-decoration: none; display: inline-block; box-shadow: none;"><h2 id="progress-display" style="font-size: 18px; color: green; font-weight: bold; overflow: visible;">Progresso: 0%</h2></li>
-    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
+    <li style="text-decoration: none; display: inline-block; box-shadow: none;"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#1f1f1f"><path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5-56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg><h2 style="font-size: clamp(14px, 1.2vw, 18px); max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center;">${date}</h2></li>
     </ul>
     </div>
 
@@ -1262,56 +1262,86 @@ function showFailedPopup(message) {
     }, 4000);
 }
 
-// Timer for user activity tracking
-// let activeTime = 0; // Tempo ativo em segundos
-// let activityInterval;
+let activeTime = 0; // Tempo ativo em segundos
+let activityInterval;
+let saveInterval;
 
-// // Inicia o contador de tempo ativo
-// function startActivityTimer() {
-//     activityInterval = setInterval(() => {
-//         activeTime++;
-//     }, 1000); // Incrementa a cada segundo
-// }
+// Inicia o contador de tempo ativo
+function startActivityTimer() {
+    activityInterval = setInterval(() => {
+        activeTime++;
+        updateActiveTimeLabel(); // Atualiza a label a cada segundo
+    }, 1000); // Incrementa a cada segundo
 
-// Para o contador de tempo ativo e envia os dados para o backend
-async function stopActivityTimer() {
-    clearInterval(activityInterval);
+    // Salva o tempo ativo no backend a cada 30 segundos
+    saveInterval = setInterval(() => {
+        const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato YYYY-MM-DD
+        updateUserActivity(currentDate, 30); // Atualiza o tempo ativo no backend
+    }, 30000); // 30 segundos
+}
 
+// Atualiza a label com o tempo ativo em minutos
+function updateActiveTimeLabel() {
+    const activeMinutes = Math.floor(activeTime / 60); // Converte para minutos
+    const userActivityLabel = document.getElementById("user-activity");
+    if (userActivityLabel) {
+        userActivityLabel.textContent = activeMinutes; // Atualiza o texto da label
+    }
+}
+
+// Função para atualizar o tempo ativo no backend
+async function updateUserActivity(date, activeTimeToAdd) {
     const token = getCookie('auth_token'); // Obtenha o token de autenticação
-    const csrfToken = getCSRFToken();
 
     try {
-        const response = await fetch('/save-user-activity/', {
-            method: 'POST',
+        const response = await fetch('/update-user-activity/', {
+            method: 'PATCH',
             headers: {
                 'Authorization': `Token ${token}`,
-                'X-CSRFToken': csrfToken,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ active_time: activeTime }),
+            body: JSON.stringify({ date, active_time: activeTimeToAdd }), // Envia a data e o tempo ativo a ser adicionado
         });
 
         const data = await response.json();
         if (data.success) {
-            console.log('Tempo ativo salvo com sucesso!');
+            console.log('Tempo ativo atualizado com sucesso!');
         } else {
-            console.error('Erro ao salvar o tempo ativo:', data.message);
+            console.error('Erro ao atualizar o tempo ativo:', data.message);
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
     }
 }
 
+// Para o contador de tempo ativo e salva os dados finais
+function stopActivityTimer() {
+    clearInterval(activityInterval);
+    clearInterval(saveInterval);
+    const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato YYYY-MM-DD
+    updateUserActivity(currentDate, activeTime); // Salva o tempo ativo final no backend
+}
+
 // Inicia o timer ao carregar a página
-window.addEventListener('load', startActivityTimer);
+window.addEventListener('load', () => {
+    console.log('Página carregada');
+    startActivityTimer();
+});
 
 // Para o timer ao sair da página
-window.addEventListener('beforeunload', stopActivityTimer);
+window.addEventListener('unload', () => {
+    console.log('Página sendo descarregada');
+    stopActivityTimer();
+});
 
-// import Chart from 'chart.js/auto';
+// Referências aos elementos
+const activeTimeButton = document.getElementById("active-time-button");
+const activeTimePopup = document.getElementById("activity-popup");
+const closeActiveTimePopup = document.getElementById("close-activity-popup");
+const activeTimeInfo = document.getElementById("active-time-info");
 
-// Button to fetch user activity and display chart
-document.getElementById('activity-button').addEventListener('click', async () => {
+// Função para buscar e exibir o tempo ativo
+activeTimeButton.addEventListener("click", async () => {
     const token = getCookie('auth_token');
 
     try {
@@ -1324,45 +1354,47 @@ document.getElementById('activity-button').addEventListener('click', async () =>
         });
 
         const data = await response.json();
+        console.log('Dados de atividade do usuário:', data);
+
         if (data.success) {
-            const labels = data.data.map(item => item.date);
-            const values = data.data.map(item => item.active_time / 60); // Converte para minutos
+            // Limpa o conteúdo anterior do popup
+            activeTimeInfo.innerHTML = '';
 
-            // Exibe o popup
-            document.getElementById('activity-popup').style.display = 'block';
+            // Itera sobre o array de dados e exibe cada registro
+            data.data.forEach((activity) => {
+                const date = activity.date;
+                const activeTimeInSeconds = activity.active_time;
+                const activeTimeInMinutes = Math.floor(activeTimeInSeconds / 60);
 
-            // Cria o gráfico
-            const ctx = document.getElementById('activity-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Tempo Ativo (minutos)',
-                        data: values,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                    }],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
+                // Cria um parágrafo para cada registro
+                const activityInfo = document.createElement('p');
+                activityInfo.textContent = `Data: ${date}, Tempo Ativo: ${activeTimeInMinutes} minutos`;
+                activeTimeInfo.appendChild(activityInfo);
             });
+
+            activeTimePopup.style.display = "block"; // Exibe o popup
         } else {
             console.error('Erro ao carregar os dados de atividade:', data.message);
+            activeTimeInfo.textContent = 'Erro ao carregar os dados de atividade.';
+            activeTimePopup.style.display = "block"; // Exibe o popup
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
+        activeTimeInfo.textContent = 'Erro ao carregar os dados de atividade.';
+        activeTimePopup.style.display = "block"; // Exibe o popup
     }
 });
 
-document.getElementById('close-activity-popup').addEventListener('click', () => {
-    document.getElementById('activity-popup').style.display = 'none';
+// Função para fechar o popup
+closeActiveTimePopup.addEventListener("click", () => {
+    activeTimePopup.style.display = "none"; // Esconde o popup
+});
+
+// Fecha o popup se o usuário clicar fora do conteúdo
+window.addEventListener("click", (event) => {
+    if (event.target === activeTimePopup) {
+        activeTimePopup.style.display = "none";
+    }
 });
 
 function startPomodoro() {

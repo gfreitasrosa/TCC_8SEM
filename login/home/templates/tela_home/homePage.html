@@ -158,6 +158,7 @@
                     <p id="pomodoro-timer">25:00</p>
                     <audio id="pomodoro-sound" src="{% static 'sounds/pomodoro.mp3' %}" preload="auto"></audio>
                 </div>
+                <!-- <button id="active-time-button" style="margin-top: 20px;">Ver Tempo Ativo</button> -->
                 <div class="gamification">
                     <p>Pontos: {{ request.user.points }}</p>
                     <p>Sequência: 
@@ -219,6 +220,15 @@
     <div class="popup-content">
         <span class="close-btn" onclick="closePopup_feeback()">&times;</span>
         <p id="feedback-message"></p>
+    </div>
+</div>
+
+<!-- Popup para exibir as informações -->
+<div id="activity-popup" class="popup" style="display: none;">
+    <div class="popup-content">
+        <span class="close-btn" id="close-activity-popup">&times;</span>
+        <h2>Tempo Ativo</h2>
+        <p id="active-time-info">Carregando...</p>
     </div>
 </div>
 
