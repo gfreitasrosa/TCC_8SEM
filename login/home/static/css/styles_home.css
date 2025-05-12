@@ -405,30 +405,30 @@ margin-top:0;
 
 /* Popup styling */
 .popup {
-    display: none; /* Escondido por padrão */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute; /* Altere de fixed para absolute */
+    top: auto; /* Permita que ele se ajuste ao fluxo da página */
+    left: auto; /* Permita que ele se ajuste ao fluxo da página */
+    width: auto; /* Largura dinâmica com base no conteúdo */
+    height: auto; /* Altura dinâmica com base no conteúdo */
     background-color: var(--bg-color);
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 20px; /* Adicione espaçamento interno */
+    margin: 20px auto; /* Centralize horizontalmente */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .popup-content {
-    background-color: var(--bg-color);
+    width: auto; /* Largura dinâmica com base no conteúdo */
+    max-width: 90%; /* Limite a largura máxima para telas menores */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    transform: translateY(-20px);
     font-size: 16px;
-    width: 300px;
     text-align: center;
-    z-index: 1001;
-    }
+}
 
 .popup-open{
     display: block;
@@ -1411,4 +1411,30 @@ textarea:disabled {
     z-index: 1000;
     width: 500px;
     height: 300px;
+}
+
+#pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#start-pomodoro {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#start-pomodoro:hover {
+    background-color: #45a049;
+}
+
+#pomodoro-timer {
+    font-size: 24px;
+    font-weight: bold;
 }

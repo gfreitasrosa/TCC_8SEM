@@ -82,6 +82,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
+    const notification_time = document.getElementById("notification-time").value;
     const token = getCookie('auth_token'); 
 
 
@@ -102,6 +103,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
                 document.getElementById("trail-name").value = "";
                 document.getElementById("trail-date").value = "";
                 document.getElementById("trail-reminder").checked = false;
+                document.getElementById("notification-time").value = "";
             } else {
                  // Create a new trail card
                 const trailCard = document.createElement("div");
@@ -123,6 +125,7 @@ document.getElementById("save-trail").addEventListener("click", async function (
                 document.getElementById("trail-name").value = "";
                 document.getElementById("trail-date").value = "";
                 document.getElementById("trail-reminder").checked = false;
+                document.getElementById("notification-time").value = "";
                     }
         } catch (error) {
             console.error('Erro na requisição:', error);
@@ -521,6 +524,7 @@ async function deleteTask(taskId) {
             if (tinymce.get('task-notes')) {
                 tinymce.get('task-notes').remove(); // Destroy TinyMCE instance
             }
+            document.getElementById("task-details").innerHTML = "<h3>Selecione uma tarefa para ver os detalhes</h3>";
             // Atualizar a interface ou remover a tarefa da lista
         } else {
             console.error("Falhou em deletar task:", response.statusText);
@@ -530,8 +534,7 @@ async function deleteTask(taskId) {
         console.error("Error:", error);
     }
 
-    // document.getElementById("task-details").innerHTML = "<h3>Select a task to view details</h3>";
-    //updateProgress();
+    
 
 }
 
@@ -722,7 +725,9 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
+    const notification_time = document.getElementById("notification-time").value;
 
+    console.log(notification_time);
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
         const authToken = getAuthToken();  // Função para obter o token de autenticação
@@ -749,12 +754,14 @@ async function saveTrail() {
                         name: trailName,
                         date: trailDate,
                         reminder: trailReminder,
+                        notification_time: notification_time,
                     }),
                 });
         
                 if (response.ok) {
                     const trail = await response.json();
                     console.log("Trilha criada com sucesso:", trail);
+                    console.log("notification-time:", notification_time);
                     // Exibe o popup de sucesso
                     showSuccessPopup("Trilha criada com sucesso");
 
@@ -1358,3 +1365,49 @@ document.getElementById('close-activity-popup').addEventListener('click', () => 
     document.getElementById('activity-popup').style.display = 'none';
 });
 
+function startPomodoro() {
+    const timerDisplay = document.getElementById("pomodoro-timer");
+    if (!timerDisplay) {
+        console.error("Elemento com ID 'pomodoro-timer' não encontrado.");
+        return;
+    }
+
+    let timeRemaining = 25 * 60; // 25 minutos em segundos
+
+    // Atualiza o display do timer
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    // Atualiza o timer a cada segundo
+    const timerInterval = setInterval(function () {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+
+            // Reproduz o som
+            const pomodoroSound = document.getElementById("pomodoro-sound");
+            if (pomodoroSound) {
+                pomodoroSound.play();
+            }
+
+            // Altera o título da aba
+            const originalTitle = document.title;
+            document.title = "Pomodoro concluído! 🎉";
+
+            // Restaura o título após 5 segundos
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 5000);
+
+            showSuccessPopup("Pomodoro concluído! Faça uma pausa.");
+        }
+    }, 1000);
+
+    // Inicializa o display do timer
+    updateTimerDisplay();
+}

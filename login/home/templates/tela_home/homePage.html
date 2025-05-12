@@ -31,6 +31,10 @@
                 Ativar lembrete
             </label><br />
 
+            <!-- Novo campo para escolher o tempo de notificação -->
+            <label for="notification-time">Tempo antes da data final para notificação (em dias):</label>
+            <input type="number" id="notification-time" min="1" placeholder="Ex: 3" /><br />
+
             <button id="save-trail" onclick="saveTrail()">Salvar trilha</button>
             <button id="cancel-trail">Cancelar</button>
         </div>
@@ -74,10 +78,53 @@
                     <div class="popup-content">
                         <span class="close-btn" id="closeInfoPopup">&times;</span>
                         <h2>Informações Importantes</h2>
-                        <p id="textoAjuda">Aqui você pode adicionar um texto explicativo para ajudar os usuários a entenderem como usar sua aplicação, resolver problemas comuns ou fornecer dicas sobre funcionalidades.</p>
-                        <p id="textoAjuda">Exemplo: Para fazer login, insira seu nome de usuário e senha e clique em "Entrar". Se você esquecer sua senha, clique em "Esqueci minha senha" para recuperá-la.</p>
+                        <p id="textoAjuda">
+                            🏠 <strong>Bem-vindo ao ANOTAAI</strong>, nosso software de estudos e acompanhamento de tarefas.
+                            <br>A tela inicial é sua <em>Home-page</em>, onde você tem:
+                            <ul>
+                                <li>Visão geral de seus estudos</li>
+                                <li>Pontuação</li>
+                                <li>Quantidade de atividades</li>
+                                <li>Sequência de dias de atividade</li>
+                                <li>Opções de tema</li>
+                                <li>Opções de trilha</li>
+                            </ul>
+                            🎨 <strong>Customização de temas (Canto superior esquerdo)</strong>
+                            <br>Essa opção permite ao usuário alternar as cores e tons da sua tela, contendo atualmente 3 temas:
+                            <ul>
+                                <li><strong>Padrão:</strong> branco e azul como base, tema ativo e calmo, visando concentração e foco.</li>
+                                <li><strong>Noturno:</strong> tema escuro com tons mais escuros, ótimo para usuários que estudam à noite com pouca luz, ajudando a preservar a saúde dos olhos e evitar fadiga mental.</li>
+                                <li><strong>Cerejeira:</strong> tema com muitos tons de rosa, inspirado na tradicional árvore de cerejeira do Japão, conhecida por transmitir calma, tranquilidade, paciência, concentração e foco.</li>
+                            </ul>
+                            📊 <strong>Barra principal</strong>
+                            <br>Essa é a barra do usuário que inicialmente é azul (tema padrão). Ela contém:
+                            <ul>
+                                <li>Informações do progresso</li>
+                                <li>Pontuação do usuário pelas tarefas concluídas</li>
+                                <li>Sequência de dias</li>
+                                <li>O logo do <em>AnotaAí</em>, que é clicável e contém outras opções de customização</li>
+                            </ul>
+                            📚 <strong>Aba das Trilhas e Tarefas</strong>
+                            <br>Esse conteúdo contém as trilhas (tarefas, temas e roteiros de estudos criados pelo usuário) e suas opções internas, como:
+                            <ul>
+                                <li>Criar trilha: abre uma modal para inserir o nome da trilha</li>
+                                <li>Data limite da trilha</li>
+                                <li>Opção de lembretes para a trilha</li>
+                            </ul>
+                            📝 <strong>Dentro das trilhas</strong>
+                            <br>Ao clicar na trilha criada, você terá algumas informações e opções para a configuração da trilha:
+                            <ul>
+                                <li>Opção de lembrete: caso queira ativar/desativar posteriormente</li>
+                                <li>Lista de tarefas criadas para a trilha</li>
+                                <li>Progresso da trilha em porcentagem (automaticamente computado)</li>
+                                <li>Opções de customização de texto e campo de texto para anotações e informações importantes da trilha e seu conteúdo</li>
+                            </ul>
+                            ✅ <strong>BORA TRABALHAR</strong>
+                            <br>Agora que já conhece o <em>AnotaAí</em>, vamos colocar suas ferramentas em prática e começar os estudos!
+                        </p>
                     </div>
                 </div>
+                
 
                 <a href="#feedback" id="feedbackLink"><i class="fas fa-comment-dots"></i> Feedback</a>
 
@@ -106,6 +153,11 @@
             <ul id="nav_hor">
                 <li>Pontuação</li> 
                 <li>N° de atividades</li> 
+                <div id="pomodoro-container">
+                    <button id="start-pomodoro" onclick="startPomodoro()">Iniciar Pomodoro</button>
+                    <p id="pomodoro-timer">25:00</p>
+                    <audio id="pomodoro-sound" src="{% static 'sounds/pomodoro.mp3' %}" preload="auto"></audio>
+                </div>
                 <div class="gamification">
                     <p>Pontos: {{ request.user.points }}</p>
                     <p>Sequência: 

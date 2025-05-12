@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from django.conf import settings
 from django.core.mail import BadHeaderError
 import logging
 from django.views.decorators.csrf import csrf_exempt
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from home import serializers
 from tela_login.models import Usuario, UserActivity
 """from tela_login.models import Profile"""
@@ -403,3 +404,40 @@ def get_user_activity(request):
         return JsonResponse({'success': True, 'data': data})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+from django.core.mail import EmailMultiAlternatives
+from datetime import datetime, timedelta
+from django.conf import settings
+
+def enviar_email_lembrete():
+    trilhas = Trilha.objects.filter(reminder=True)
+
+    for trilha in trilhas:
+        data_final = trilha.date
+        dias_para_aviso = trilha.notification_time or 0
+        data_lembrete = data_final - timedelta(days=dias_para_aviso)
+
+        if data_lembrete == datetime.now().date():
+            # Assunto do e-mail
+            subject = f'[AnotAí] Aviso: Sua trilha "{trilha.name}" está prestes a expirar!'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [trilha.user.email]
+
+            # Corpo do e-mail em texto simples
+            text_content = f"""
+            Olá {trilha.user.name},
+
+            Este é um lembrete de que a trilha "{trilha.name}" está prestes a expirar.
+            A data final da trilha é {data_final}.
+
+            Certifique-se de concluir todas as tarefas antes da data final para alcançar seus objetivos.
+
+            Este é um e-mail automático. Por favor, não responda a esta mensagem.
+
+            Atenciosamente,
+            Equipe AnotAí
+            """
+
+            # Enviar o e-mail
+            email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+            email.send()
