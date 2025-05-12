@@ -728,62 +728,66 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
-    const notification_time = document.getElementById("notification-time").value;
+    const notificationTime = document.getElementById("notification-time").value;
 
-    console.log(notification_time);
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
-        const authToken = getAuthToken();  // Função para obter o token de autenticação
-        const token = getCookie('auth_token');  // Supondo que o token esteja no cookie 'auth_token'
+        const token = getCookie('auth_token'); // Supondo que o token esteja no cookie 'auth_token'
+
         try {
+            // Verifica se a trilha já existe
             const response = await fetch(`/home/get_trilhas_nome/${trailName}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`, // Passa o token no cabeçalho
                 },
             });
+
             if (response.ok) {
                 const data = await response.json();
-                //alert("Trilha já existente!");
                 showFailedPopup("Trilha já existente!");
             } else {
-                const response = await fetch('/api/trails/', {
+                // Cria o corpo da requisição
+                const requestBody = {
+                    name: trailName,
+                    date: trailDate,
+                };
+
+                // Adiciona os campos opcionais apenas se tiverem valores
+                if (trailReminder) {
+                    requestBody.reminder = trailReminder;
+                }
+                if (notificationTime) {
+                    requestBody.notification_time = notificationTime;
+                }
+
+                // Faz a requisição para criar a trilha
+                const createResponse = await fetch('/api/trails/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken,
                         'Authorization': `Token ${token}`,
                     },
-                    body: JSON.stringify({
-                        name: trailName,
-                        date: trailDate,
-                        reminder: trailReminder,
-                        notification_time: notification_time,
-                    }),
+                    body: JSON.stringify(requestBody),
                 });
-        
-                if (response.ok) {
-                    const trail = await response.json();
+
+                if (createResponse.ok) {
+                    const trail = await createResponse.json();
                     console.log("Trilha criada com sucesso:", trail);
-                    console.log("notification-time:", notification_time);
-                    // Exibe o popup de sucesso
                     showSuccessPopup("Trilha criada com sucesso");
 
                     // Atualize a interface aqui (adicione a nova trilha à lista)
                 } else {
-                    const errorData = await response.json();
-                    console.error("Error details:", errorData);
-                    //alert("Error saving trail: " + JSON.stringify(errorData));
+                    const errorData = await createResponse.json();
+                    console.error("Erro ao criar a trilha:", errorData);
                     showFailedPopup("Erro ao criar a trilha. Tente novamente.");
                 }
-                    }
+            }
         } catch (error) {
             console.error('Erro na requisição:', error);
         }
-
-        
     } else {
-        //alert("Por favor insira um nome e uma data final para a trilha.");
         showFailedPopup("Por favor, insira um nome e uma data final para a trilha.");
     }
 }
