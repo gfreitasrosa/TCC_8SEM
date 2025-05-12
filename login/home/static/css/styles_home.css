@@ -791,6 +791,10 @@ margin-top: 5px;
         padding: 5px 10px; /* Compacta os itens */
     }
 
+    #nav_hor li[data-tooltip-top]::before {
+        top: -80%; /* Ajusta a posição da tooltip */
+    }
+
     /* Ajustar o layout do #traildisp */
     #traildisp {
         display: flex;
@@ -921,6 +925,10 @@ margin-top: 5px;
     #horizontal-navbar li {
         font-size: 14px; /* Reduz o tamanho da fonte */
         padding: 5px 10px; /* Compacta os itens */
+    }
+
+    #nav_hor li[data-tooltip-top]::before {
+        top: -80%; /* Ajusta a posição da tooltip */
     }
 
     #nav_hor li[data-tooltip-top]::before {
