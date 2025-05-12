@@ -395,21 +395,26 @@ async function displayTaskDetails(taskName, taskId) {  // Tornar a função ass�
             `;
 
             tinymce.init({
-                selector: '#task-notes', // Target the textarea with id "task-notes"
-                plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
-                toolbar: 'undo redo | bold italic | fontfamily fontsize | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
-                menubar: false, // Optional: Disable the menu bar
-                statusbar: false, // Optional: Disable the status bar
-                fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
-                font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
-                image_advtab: false, // Disable advanced image settings
-                file_picker_callback: function(callback, value, meta) {
-                    if (meta.filetype === 'image') {
-                        alert('Image uploading is disabled.');
-                        return false;
-                    }
-                },
-                content_style: `
+            selector: '#task-notes', // Target the textarea with id "task-notes"
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar: 'undo redo | bold italic | fontfamily fontsize | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
+            menubar: false, // Optional: Disable the menu bar
+            statusbar: false, // Optional: Disable the status bar
+            fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // Custom font sizes
+            font_formats: 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,serif;Times New Roman=times new roman,times,serif;Verdana=verdana,sans-serif', // Set available fonts
+            image_advtab: false, // Disable advanced image settings
+            file_picker_callback: function(callback, value, meta) {
+                if (meta.filetype === 'image') {
+                    alert('Image uploading is disabled.');
+                    return false;
+                }
+            },
+            setup: function(editor) {
+                editor.on('init', function() {
+                    editor.setContent(''); // Inicializa o editor com conteúdo vazio
+                });
+            },
+            content_style: `
                 .mce-container {
                     z-index: 1000 !important; /* Ajuste o z-index do TinyMCE */
                 }
@@ -466,6 +471,12 @@ async function UpdateTaskStatus(taskName, taskId) {
                 //editor.getBody().setAttribute('contenteditable', false); // Torna o editor somente leitura
             } else {
                 console.error('Editor não inicializado.');
+            }
+
+            // Atualize os pontos no DOM
+            const pointsElement = document.getElementById('user-points'); // Supondo que o elemento tenha o ID 'user-points'
+            if (pointsElement) {
+                pointsElement.textContent = `XP: ${data.points}`; // Atualiza os pontos no DOM
             }
 
             // Atualize o progresso da trilha
@@ -723,62 +734,66 @@ async function saveTrail() {
     const trailName = document.getElementById("trail-name").value;
     const trailDate = document.getElementById("trail-date").value;
     const trailReminder = document.getElementById("trail-reminder").checked;
-    const notification_time = document.getElementById("notification-time").value;
+    const notificationTime = document.getElementById("notification-time").value;
 
-    console.log(notification_time);
     if (trailName && trailDate) {
         const csrfToken = getCSRFToken(); // Função para obter CSRF Token, se necessário
-        const authToken = getAuthToken();  // Função para obter o token de autenticação
-        const token = getCookie('auth_token');  // Supondo que o token esteja no cookie 'auth_token'
+        const token = getCookie('auth_token'); // Supondo que o token esteja no cookie 'auth_token'
+
         try {
+            // Verifica se a trilha já existe
             const response = await fetch(`/home/get_trilhas_nome/${trailName}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`, // Passa o token no cabeçalho
                 },
             });
+
             if (response.ok) {
                 const data = await response.json();
-                //alert("Trilha já existente!");
                 showFailedPopup("Trilha já existente!");
             } else {
-                const response = await fetch('/api/trails/', {
+                // Cria o corpo da requisição
+                const requestBody = {
+                    name: trailName,
+                    date: trailDate,
+                };
+
+                // Adiciona os campos opcionais apenas se tiverem valores
+                if (trailReminder) {
+                    requestBody.reminder = trailReminder;
+                }
+                if (notificationTime) {
+                    requestBody.notification_time = notificationTime;
+                }
+
+                // Faz a requisição para criar a trilha
+                const createResponse = await fetch('/api/trails/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken,
                         'Authorization': `Token ${token}`,
                     },
-                    body: JSON.stringify({
-                        name: trailName,
-                        date: trailDate,
-                        reminder: trailReminder,
-                        notification_time: notification_time,
-                    }),
+                    body: JSON.stringify(requestBody),
                 });
-        
-                if (response.ok) {
-                    const trail = await response.json();
+
+                if (createResponse.ok) {
+                    const trail = await createResponse.json();
                     console.log("Trilha criada com sucesso:", trail);
-                    console.log("notification-time:", notification_time);
-                    // Exibe o popup de sucesso
                     showSuccessPopup("Trilha criada com sucesso");
 
                     // Atualize a interface aqui (adicione a nova trilha à lista)
                 } else {
-                    const errorData = await response.json();
-                    console.error("Error details:", errorData);
-                    //alert("Error saving trail: " + JSON.stringify(errorData));
+                    const errorData = await createResponse.json();
+                    console.error("Erro ao criar a trilha:", errorData);
                     showFailedPopup("Erro ao criar a trilha. Tente novamente.");
                 }
-                    }
+            }
         } catch (error) {
             console.error('Erro na requisição:', error);
         }
-
-        
     } else {
-        //alert("Por favor insira um nome e uma data final para a trilha.");
         showFailedPopup("Por favor, insira um nome e uma data final para a trilha.");
     }
 }
@@ -824,19 +839,6 @@ async function saveTask(taskName, taskId) {
 async function saveOrUpdateTask(taskName, taskId) {
     //const taskStatus = document.getElementById('task-status').value; // ID do dropdown de status
     let taskNotes = null; // Pegue o conteúdo do TinyMCE
-    if (taskId) {
-        const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
-        if (editor) { // Verifica se o editor está inicializado
-            const content = editor.getContent(); // Obtém o conteúdo do editor
-            if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
-                taskNotes = content; // Atribui o conteúdo às notas
-            } else {
-                console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
-            }
-        } else {
-            console.log('Editor TinyMCE não inicializado.');
-        }
-    }
     const trilhaElement = document.getElementById('trilha_name'); // Nome da trilha
     // Obtenha apenas o texto interno do elemento
     const trilhaName = trilhaElement.textContent.trim();
@@ -884,6 +886,17 @@ async function saveOrUpdateTask(taskName, taskId) {
                 if (response.ok) {  // Verifica se o status é 2xx
                     const data = await response.json();
                     console.log("Tarefa encontrada:", data.resultado);
+                    const editor = tinymce.get('task-notes'); // Obtém o editor do TinyMCE
+                    if (editor) { // Verifica se o editor está inicializado
+                        const content = editor.getContent(); // Obtém o conteúdo do editor
+                        if (content.trim() !== '') { // Verifica se o conteúdo não está vazio
+                            taskNotes = content; // Atribui o conteúdo às notas
+                        } else {
+                            console.log('Nenhuma nota encontrada. Não será feita nenhuma busca.');
+                        }
+                    } else {
+                        console.log('Editor TinyMCE não inicializado.');
+                    }
                     showSuccessPopup("Tarefa salva com sucesso");
                     // Se a tarefa existir, use PUT para atualizar
                     method = 'PATCH';

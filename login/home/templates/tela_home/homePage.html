@@ -152,7 +152,7 @@
         <div id="horizontal-navbar">
             <h1>Bons estudos, {{ request.user.name }}!</h1>
             <ul id="nav_hor">
-                <li data-tooltip-bottom="Experiência total">XP: {{ request.user.points }}</li> 
+                <li data-tooltip-bottom="Experiência total" id="user-points">XP: {{ request.user.points }}</li> 
                 <li data-tooltip-bottom="Ofensiva atual">{{ request.user.streak }} Dias</li>
                 <li data-tooltip-bottom="Pomodoro" data-tooltip-top="O método Pomodoro é uma técnica de gestão de tempo que divide o trabalho em intervalos de 25 minutos (chamados de 'pomodoros'), seguidos por pequenas pausas. Após quatro ciclos, faz-se uma pausa maior. Ele ajuda a manter o foco e aumentar a produtividade" 
                 style="background: none; border: none;" id="start-pomodoro" onclick="startPomodoro()"><img src="{% static 'images/relopomo.png' %}" style="width: 35px; height: 35px;"></img>
