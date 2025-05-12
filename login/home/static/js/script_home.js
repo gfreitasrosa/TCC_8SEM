@@ -1267,7 +1267,7 @@ function showFailedPopup(message) {
     }, 4000);
 }
 
-let activeTime = 0; // Tempo ativo em segundos
+/** let activeTime = 0; // Tempo ativo em segundos
 let activityInterval;
 let saveInterval;
 
@@ -1337,7 +1337,7 @@ window.addEventListener('load', () => {
 window.addEventListener('unload', () => {
     console.log('Página sendo descarregada');
     stopActivityTimer();
-});
+}); **/
 
 // Referências aos elementos
 const activeTimeButton = document.getElementById("active-time-button");
