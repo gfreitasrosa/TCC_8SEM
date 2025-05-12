@@ -43,7 +43,7 @@
     <div id="horizontal">
         <div id="profilepic">
             <!-- <button id="activity-button" style="position: absolute; top: 10px; right: -50px;">Atividade</button> -->
-            <img src="{% static 'images/logo.png' %}" alt="Imagem do Usuário" class="profile-image" onclick="toggleDropdown()">
+            <img src="{% static 'images/logo.png' %}" alt="Logo do site" class="profile-image" onclick="toggleDropdown()">
             <div id="dropdown-menu" class="dropdown-content">
                 <a href="#profile" id="profile-link"><i class="fas fa-user"></i> Ver Perfil</a>
 
@@ -150,22 +150,22 @@
             </div>
         </div>
         <div id="horizontal-navbar">
+            <h1>Bons estudos, {{ request.user.name }}!</h1>
             <ul id="nav_hor">
-                <li>Pontuação</li> 
-                <li>N° de atividades</li> 
-                <div id="pomodoro-container">
-                    <button id="start-pomodoro" onclick="startPomodoro()">Iniciar Pomodoro</button>
-                    <p id="pomodoro-timer">25:00</p>
-                    <audio id="pomodoro-sound" src="{% static 'sounds/pomodoro.mp3' %}" preload="auto"></audio>
-                </div>
+                <li data-tooltip-bottom="Experiência total">XP: {{ request.user.points }}</li> 
+                <li data-tooltip-bottom="Ofensiva atual">{{ request.user.streak }} Dias</li>
+                <li data-tooltip-bottom="Pomodoro" data-tooltip-top="O método Pomodoro é uma técnica de gestão de tempo que divide o trabalho em intervalos de 25 minutos (chamados de 'pomodoros'), seguidos por pequenas pausas. Após quatro ciclos, faz-se uma pausa maior. Ele ajuda a manter o foco e aumentar a produtividade" 
+                style="background: none; border: none;" id="start-pomodoro" onclick="startPomodoro()"><img src="{% static 'images/relopomo.png' %}" style="width: 35px; height: 35px;"></img>
+                <audio id="pomodoro-sound" src="{% static 'sounds/pomodoro.mp3' %}" preload="auto"></audio>
+                <p id="pomodoro-timer">25:00</p></li>
+                <!-- <div class="gamification">
                 <!-- <button id="active-time-button" style="margin-top: 20px;">Ver Tempo Ativo</button> -->
-                <div class="gamification">
                     <p>Pontos: {{ request.user.points }}</p>
                     <p>Sequência: 
                         {{ request.user.streak }} 
                         <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fogo" style="width: 20px; vertical-align: middle;">
                     </p>
-                </div>
+                </div> -->
             </ul>
         </div>
         <div style="position: fixed; top: 10px; right: 10px; z-index: 999;">

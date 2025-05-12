@@ -131,7 +131,8 @@ document.getElementById("save-trail").addEventListener("click", async function (
             console.error('Erro na requisição:', error);
         }
     } else {
-        alert("Por favor insira um nome e uma data final para a trilha.");
+        //alert("Por favor insira um nome e uma data final para a trilha.");
+        showFailedPopup("Por favor, insira um nome e uma data final para a trilha.");
     }
 });
 
@@ -708,11 +709,11 @@ profileForm.addEventListener('submit', async function (event) {
 
         const data = await response.json();
         if (data.success) {
-            alert('Perfil atualizado com sucesso!');
+            //alert('Perfil atualizado com sucesso!');
             showSuccessPopup(data.message);
             profilePopup.style.display = 'none'; // Fechar o popup
         } else {
-            alert('Erro ao atualizar o perfil: ' + data.message);
+            //alert('Erro ao atualizar o perfil: ' + data.message);
             showFailedPopup(data.message);
         }
     } catch (error) {
@@ -741,7 +742,8 @@ async function saveTrail() {
             });
             if (response.ok) {
                 const data = await response.json();
-                alert("Trilha já existente!");
+                //alert("Trilha já existente!");
+                showFailedPopup("Trilha já existente!");
             } else {
                 const response = await fetch('/api/trails/', {
                     method: 'POST',
@@ -769,7 +771,7 @@ async function saveTrail() {
                 } else {
                     const errorData = await response.json();
                     console.error("Error details:", errorData);
-                    alert("Error saving trail: " + JSON.stringify(errorData));
+                    //alert("Error saving trail: " + JSON.stringify(errorData));
                     showFailedPopup("Erro ao criar a trilha. Tente novamente.");
                 }
                     }
@@ -779,7 +781,8 @@ async function saveTrail() {
 
         
     } else {
-        alert("Por favor insira um nome e uma data final para a trilha.");
+        //alert("Por favor insira um nome e uma data final para a trilha.");
+        showFailedPopup("Por favor, insira um nome e uma data final para a trilha.");
     }
 }
 
@@ -816,7 +819,7 @@ async function saveTask(taskName, taskId) {
         // Atualize a interface aqui (exemplo: atualize os detalhes da tarefa)
 
     } else {
-        alert("Erro ao atualizar a tarefa.");
+        //alert("Erro ao atualizar a tarefa.");
         showFailedPopup("Erro ao atualizar a tarefa. Tente novamente.");
     }
 }
@@ -958,7 +961,8 @@ async function saveOrUpdateTask(taskName, taskId) {
             showSuccessPopup("Tarefa criada com sucesso");
 
         } else {
-            alert(`Erro ao criar a tarefa`);
+            //alert(`Erro ao criar a tarefa`);
+            showFailedPopup("Erro ao criar a tarefa. Tente novamente.");
         }
         }
 
@@ -975,7 +979,8 @@ async function loadTrails() {
         console.log("Trilhas carregadas:", trails);
         // Adicione cada trilha à interface aqui
     } else {
-        alert("Erro ao carregar trilhas.");
+        //alert("Erro ao carregar trilhas.");
+        showFailedPopup("Erro ao carregar trilhas. Tente novamente.");
     }
 }
 

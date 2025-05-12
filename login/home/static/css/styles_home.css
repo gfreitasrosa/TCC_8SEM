@@ -1,10 +1,10 @@
 :root {
 	--bg-color: #f2f4f8;/* #ffffff; */
 	--text-color: #2c2c2c; /* #000000; */
-	--accent-color: #0056b3; /* #516ED0; */
+	--accent-color: #0074d9; /* #516ED0; */
 	--container-bg: #ffffff; /* #516ED045; */
 	--card-bg: #f7f9fc; /* #f0f0f0; */
-	--button-hover-color: #003f8a;
+	--button-hover-color: #005fa3;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --border-radius: 10px;
     --transition-speed: 0.3s;
@@ -217,13 +217,14 @@ margin-top:0;
     width: 98%; /* 100% before (delete this) */
     max-width: 1600px;
     height: auto;
-    background-color: var(--accent-color);
-    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent-color), var(--button-hover-color)); /* Gradiente baseado no tema */
+    border-radius: var(--border-radius);
     margin: 40px auto;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: white;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    color: var(--text-color);
     overflow: hidden;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 #horizontal-navbar{
@@ -244,18 +245,22 @@ margin-top:0;
     flex-direction: row;
     list-style: none;
     padding: 10px;
-    background-color: var(--accent-color);
+    background: none;
     border-radius: var(--border-radius);
     margin: 0;
     }
     #horizontal-navbar li{
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: var(--border-radius);
-    transition: background-color var(--transition-speed);
+    font-weight: bold;
+    text-align: center;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
 }
     #horizontal-navbar li:hover{
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px var(--shadow-color);
     }
 
 #profilepic {
@@ -382,6 +387,96 @@ margin-top:0;
     background-color:var(--card-bg);
     transition: background-color 0.3s ease;
     }
+
+    #nav_hor li[data-tooltip-top]::before {
+    content: attr(data-tooltip-top); /* Usa o valor do atributo data-tooltip-top */
+    position: absolute;
+    top: -200%; /* Posiciona acima do elemento */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+    color: white;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    width: 300px;
+    font-size: 12px;
+    white-space: normal;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+}
+
+    #nav_hor li[data-tooltip-bottom]::after {
+    content: attr(data-tooltip-bottom); /* Usa o valor do atributo data-tooltip */
+    position: absolute;
+    top: 120%; /* Posiciona acima do elemento */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color); /* Cor de fundo da tooltip */
+    color: white; /* Cor do texto */
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    font-size: 12px;
+    white-space: nowrap; /* Impede quebra de linha */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para a tooltip */
+    opacity: 0; /* Inicialmente invisível */
+    visibility: hidden; /* Esconde a tooltip */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10; /* Garante que fique acima de outros elementos */
+}
+
+#nav_hor li:hover[data-tooltip-top]::before,
+#nav_hor li:hover[data-tooltip-bottom]::after {
+    opacity: 1; /* Torna visível ao passar o mouse */
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px); /* Eleva ligeiramente */
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 4px 8px #f0c75e66, 0 8px 16px #f0c75e66;
+    }
+    50% {
+        box-shadow: 0 6px 12px #f0c75e99, 0 12px 24px #f0c75e99;
+    }
+    100% {
+        box-shadow: 0 4px 8px #f0c75e66, 0 8px 16px #f0c75e99;
+    }
+}
+
+#nav_hor li[data-tooltip-bottom="Experiência total"] {
+    background: linear-gradient(90deg, #f7e7a9, #f0c75e); /* Gradiente dourado */
+    color: #4a3b1d; /* Cor do texto para contraste */
+    font-weight: bold;
+    border: 1px solid #e0b94d; /* Borda dourada */
+    box-shadow: 0 4px 8px rgba(240, 199, 94, 0.4); /* Sombra dourada suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pulseGlow 2s infinite; /* Adiciona a animação */
+}
+
+#nav_hor li[data-tooltip-bottom="Experiência total"]:hover {
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+    box-shadow: 0 8px 16px rgba(240, 199, 94, 0.8); /* Sombra mais intensa no hover */
+    animation: none; /* Remove a animação ao passar o mouse */
+}
+
+#nav_hor li[data-tooltip-bottom="Ofensiva atual"] {
+    background: linear-gradient(90deg, #f9d976, #f39c12); /* Gradiente laranja */
+    color: #5a3d0c; /* Cor do texto para contraste */
+    font-weight: bold;
+    border: 1px solid #e89c3c; /* Borda laranja */
+    box-shadow: 0 4px 8px rgba(243, 156, 18, 0.4); /* Sombra laranja suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pulseGlow 2s infinite; /* Adiciona a animação */
+}
+
+#nav_hor li[data-tooltip-bottom="Ofensiva atual"]:hover {
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(243, 156, 18, 0.6); /* Sombra mais intensa no hover */
+}
+
     #trail-popup button{
     width: 100px;
     padding: 10px;
@@ -1076,6 +1171,7 @@ transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 50%; /* Mantém o formato circular */
     background-color: transparent; /* Garante que o fundo seja transparente */
     cursor: pointer;
+    margin-left: 50px;
 }
 
 /* Ajusta o menu para descer abaixo do círculo */
@@ -1383,10 +1479,25 @@ a:hover{
     margin-top: 10px;
 }
 
+.gamification{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: bold;
+    gap: 5px;
+}
+
+.gamification p{
+    color: #7a7a7a;
+    margin: 0;
+    font-size: 14px;
+}
+
 .gamification img {
-    width: 20px; /* Ajusta o tamanho do ícone */
+    width: 24px; /* Ajusta o tamanho do ícone */
     vertical-align: middle; /* Alinha o ícone ao texto */
-    margin-right: 5px; /* Espaçamento entre o ícone e o texto */
 }
 
 button:disabled {
